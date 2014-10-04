@@ -15,7 +15,7 @@ class NewRecipeTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
 
         # He notices the page title and header mention cookbook
-        self.assertIn('Cookbook', self.browser.title)
+        self.assertIn('cookbook', self.browser.title)
         self.fail('Finish the test')
 
         # He is invited to click on a link to add a new recipe
