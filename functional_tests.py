@@ -1,5 +1,6 @@
-from selenium import webdriver
 import unittest
+
+from selenium import webdriver
 
 
 class NewRecipeTest(unittest.TestCase):
@@ -36,7 +37,7 @@ class NewRecipeTest(unittest.TestCase):
         ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         directions_textbox = self.browser.find_element_by_id('id_directions')
         servings_textbox = self.browser.find_element_by_id('id_servings')
-        add_button = self.browser.find_element_by_name('id_cancel_button')
+        add_button = self.browser.find_element_by_link_text('add')
 
         # He types in Grilled Halibut with Mango-Avocado Salsa into the textbox for name
         name_textbox.send_keys('Grilled Halibut with Mango-Avocado Salsa')
@@ -75,7 +76,7 @@ class NewRecipeTest(unittest.TestCase):
 
         # He sees that the recipe appears in the list of cookbook
         table = self.browser.find_element_by_id('id_recipe_table')
-        rows = table.find_element_by_tag_name('tr')
+        rows = table.find_elements_by_tag_name('tr')
         row_text = [row.text for row in rows]
         self.assertIn('Grilled Halibut with Mango-Avocado Salsa', row_text)
 
@@ -86,19 +87,19 @@ class NewRecipeTest(unittest.TestCase):
         # He then reopens his browser and sees that the recipe that he added is still there
 
         # He then goes to add another recipe
-        add_link = self.browser.find_element_by_link_text('add recipe')
-        add_link.click()
+        # add_link = self.browser.find_element_by_link_text('add recipe')
+        # add_link.click()
 
         # He changes his mind and cancels
-        cancel_button = self.browser.find_element_by_name('id_cancel_button')
-        cancel_button.click()
+        # cancel_button = self.browser.find_element_by_name('id_cancel_button')
+        #cancel_button.click()
 
         # He is returned to the main page
 
         # The number of recipes is still 1
-        table = self.browser.find_element_by_id('id_recipe_table')
-        rows = table.find_element_by_tag_name('tr')
-        self.assertEqual(len(rows), 1)
+        # table = self.browser.find_element_by_id('id_recipe_table')
+        # rows = table.find_element_by_tag_name('tr')
+        #self.assertEqual(len(rows), 1)
 
         # TODO -- add a second recipe
         # TODO -- click on a recipe takes you to the recipe page, verify info
