@@ -6,4 +6,8 @@ def home(request):
 
 
 def add(request):
+    if request.method == 'POST':
+        # TODO -- is there a redirect?
+        return render(request, 'home.html',
+            {'recipe_title': request.POST['recipe_title']})
     return render(request, 'add.html')

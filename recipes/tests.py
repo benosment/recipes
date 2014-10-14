@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
-from recipes.views import home
+from recipes.views import home, add
 
 
 class HomeTest(TestCase):
@@ -16,4 +16,19 @@ class HomeTest(TestCase):
         request = HttpRequest()
         response = home(request)
         expected_html = render_to_string('home.html')
+        self.assertEqual(response.content.decode(), expected_html)
+
+
+class AddTest(TestCase):
+
+    def test_add_page_can_save_a_post_request(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['recipe_title'] = 'chorizo'
+
+        response = add(request)
+
+        self.assertIn('chorizo', response.content.decode())
+        expected_html = render_to_string('home.html',
+                                         {'recipe_title': 'chorizo'})
         self.assertEqual(response.content.decode(), expected_html)

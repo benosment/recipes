@@ -6,19 +6,27 @@
 <h1>add recipe</h1>
 <br>
 <br>
-<label for="id_name">Name</label>
-<input id="id_name" placeholder="Enter the name of the recipe"/>
-<br>
-<label for="id_ingredients">Ingredients</label>
-<input id="id_ingredients"/>
-<br>
-<label for="id_directions">Directions</label>
-<input id="id_directions"/>
-<br>
-<label for="id_servings">Servings</label>
-<input id="id_servings"/>
-<br>
-<br>
-<a href="/">add</a>
+<form method="POST">
+    {%  csrf_token %}
+
+    <label for="id_title">Title</label>
+    <input name="recipe_title" id="id_title" placeholder="Enter the title of the recipe"/>
+    <br>
+
+    <label for="id_ingredients">Ingredients</label>
+    <textarea name="recipe_ingredients" id="id_ingredients" rows="4" cols="50"></textarea>
+    <br>
+
+    <label for="id_directions">Directions</label>
+    <textarea name="recipe_directions" id="id_directions" rows="4" cols="50"></textarea>
+    <br>
+
+    <label for="id_servings">Servings</label>
+    <input name="recipe_servings" id="id_servings"/>
+    <br>
+    <br>
+
+    <input id="id_add_button" type="submit" value="Add">
+</form>
 </body>
 </html>

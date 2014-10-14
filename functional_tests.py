@@ -1,6 +1,7 @@
 import unittest
 
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 class NewRecipeTest(unittest.TestCase):
@@ -31,38 +32,48 @@ class NewRecipeTest(unittest.TestCase):
         # along with a 'cancel' and 'add' button
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('add recipe', header_text)
-        name_textbox = self.browser.find_element_by_id('id_name')
+        name_textbox = self.browser.find_element_by_id('id_title')
         self.assertEqual(name_textbox.get_attribute('placeholder'),
-                         'Enter the name of the recipe')
+                         'Enter the title of the recipe')
         ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         directions_textbox = self.browser.find_element_by_id('id_directions')
         servings_textbox = self.browser.find_element_by_id('id_servings')
-        add_button = self.browser.find_element_by_link_text('add')
+        add_button = self.browser.find_element_by_id('id_add_button')
 
         # He types in Grilled Halibut with Mango-Avocado Salsa into the textbox for name
         name_textbox.send_keys('Grilled Halibut with Mango-Avocado Salsa')
 
         # He types in ingredients:
         ingredients_textbox.send_keys('1 medium ripe avocado, peeled and cut into 1/2" dice')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('1 medium ripe mango, peeled and cut into 1/2" dice')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('1 cup cherry tomatoes, quartered')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('4 large fresh basil leaves, thinly sliced')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('3 tablespoons extra-virgin olive oil, divided, plus more for brushing')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('3 tablespoons fresh lime juice, divided')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('Kosher salt and freshly ground black pepper')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('4 6-ounce halibut or mahi-mahi fillets')
+        ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('4 lime wedges')
 
         # He then types in the following for directions:
-        directions_textbox.send_keys('1. Prepare a grill to medium-high heat. Gently combine the avocado, mango, '
+        directions_textbox.send_keys('Prepare a grill to medium-high heat. Gently combine the avocado, mango, '
                                      'tomatoes, basil, 1 tablespoon oil, and 1 tablespoon lime juice in a large mixing '
                                      'bowl. Season salsa to taste with salt and pepper and set aside at room '
                                      'temperature, gently tossing occasionally.')
-        directions_textbox.send_keys('2. Place fish fillets in a 13x9x2" glass baking dish. Drizzle remaining 2 '
+        directions_textbox.send_keys(Keys.ENTER)
+        directions_textbox.send_keys('Place fish fillets in a 13x9x2" glass baking dish. Drizzle remaining 2 '
                                      'tablespoon oil and 2 tablespoon lime juice over. Season fish with salt and '
                                      'pepper. Let marinate at room temperature for  10 minutes, turning fish '
                                      'occasionally.')
-        directions_textbox.send_keys('3. Brush grill rack with oil. Grill fish until just opaque in center, about 5 '
+        directions_textbox.send_keys(Keys.ENTER)
+        directions_textbox.send_keys('Brush grill rack with oil. Grill fish until just opaque in center, about 5 '
                                      'minutes per side. Transfer to plates. Spoon mango-avocado salsa over fish. '
                                      'Squeeze a lime wedge over each and serve.')
 
