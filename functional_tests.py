@@ -12,6 +12,11 @@ class NewRecipeTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_recipe_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_add_a_recipe(self):
         # Ben goes to the recipe website homepage
         self.browser.get('http://localhost:8000')
@@ -86,10 +91,7 @@ class NewRecipeTest(unittest.TestCase):
         # He is returned to the main page
 
         # He sees that the recipe appears in the list of recipes
-        table = self.browser.find_element_by_id('id_recipe_table')
-        rows = table.find_elements_by_tag_name('tr')
-        row_text = [row.text for row in rows]
-        self.assertIn('Grilled Halibut with Mango-Avocado Salsa', row_text)
+        self.check_for_row_in_list_table('Grilled Halibut with Mango-Avocado Salsa')
 
         # He then goes to add another recipe
         add_link = self.browser.find_element_by_link_text('add recipe')
@@ -106,11 +108,8 @@ class NewRecipeTest(unittest.TestCase):
         add_button.click()
 
         # He sees that both recipes appear in the list of recipes
-        table = self.browser.find_element_by_id('id_recipe_table')
-        rows = table.find_elements_by_tag_name('tr')
-        row_text = [row.text for row in rows]
-        self.assertIn('Grilled Halibut with Mango-Avocado Salsa', row_text)
-        self.assertIn('Yogurt-Marinated Grilled Chicken', row_text)
+        self.check_for_row_in_list_table('Grilled Halibut with Mango-Avocado Salsa')
+        self.check_for_row_in_list_table('Yogurt-Marinated Grilled Chicken')
 
         self.fail('Finish the test')
 
