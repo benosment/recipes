@@ -85,21 +85,38 @@ class NewRecipeTest(unittest.TestCase):
 
         # He is returned to the main page
 
-        # He sees that the recipe appears in the list of cookbook
+        # He sees that the recipe appears in the list of recipes
         table = self.browser.find_element_by_id('id_recipe_table')
         rows = table.find_elements_by_tag_name('tr')
         row_text = [row.text for row in rows]
         self.assertIn('Grilled Halibut with Mango-Avocado Salsa', row_text)
+
+        # He then goes to add another recipe
+        add_link = self.browser.find_element_by_link_text('add recipe')
+        add_link.click()
+
+        # He then goes to add yet another recipe
+        # He sees a form with a textbox for name, ingredients, directions and servings
+        # along with a 'cancel' and 'add' button
+        name_textbox = self.browser.find_element_by_id('id_title')
+        add_button = self.browser.find_element_by_id('id_add_button')
+
+        # He types in Grilled Halibut with Mango-Avocado Salsa into the textbox for name
+        name_textbox.send_keys('Yogurt-Marinated Grilled Chicken')
+        add_button.click()
+
+        # He sees that both recipes appear in the list of recipes
+        table = self.browser.find_element_by_id('id_recipe_table')
+        rows = table.find_elements_by_tag_name('tr')
+        row_text = [row.text for row in rows]
+        self.assertIn('Grilled Halibut with Mango-Avocado Salsa', row_text)
+        self.assertIn('Yogurt-Marinated Grilled Chicken', row_text)
 
         self.fail('Finish the test')
 
         # He closes his browser
 
         # He then reopens his browser and sees that the recipe that he added is still there
-
-        # He then goes to add another recipe
-        # add_link = self.browser.find_element_by_link_text('add recipe')
-        # add_link.click()
 
         # He changes his mind and cancels
         # cancel_button = self.browser.find_element_by_name('id_cancel_button')
