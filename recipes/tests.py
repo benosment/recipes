@@ -13,11 +13,21 @@ class HomeTest(TestCase):
         found = resolve('/')
         self.assertEqual(found.func, home)
 
-    def test_home_returns_correct_html(self):
+    def test_home_page_returns_correct_html(self):
         request = HttpRequest()
         response = home(request)
         expected_html = render_to_string('home.html')
         self.assertEqual(response.content.decode(), expected_html)
+
+    def test_home_page_displays_all_recipes(self):
+        Recipe.objects.create(title='cacio e pepe')
+        Recipe.objects.create(title='BA Burger Deluxe')
+
+        request = HttpRequest()
+        response = home(request)
+
+        self.assertIn('cacio e pepe', response.content.decode())
+        self.assertIn('BA Burger Deluxe', response.content.decode())
 
 
 class AddTest(TestCase):
@@ -27,12 +37,21 @@ class AddTest(TestCase):
         request.method = 'POST'
         request.POST['recipe_title'] = 'chorizo'
 
+        add(request)
+
+        self.assertEqual(Recipe.objects.count(), 1)
+        new_recipe = Recipe.objects.first()
+        self.assertEqual(new_recipe.title, 'chorizo')
+
+    def test_add_page_can_redirect_after_a_post_request(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['recipe_title'] = 'chorizo'
+
         response = add(request)
 
-        self.assertIn('chorizo', response.content.decode())
-        expected_html = render_to_string('home.html',
-                                         {'recipe_title': 'chorizo'})
-        self.assertEqual(response.content.decode(), expected_html)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
 
 
 class RecipeModelTest(TestCase):

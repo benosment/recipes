@@ -6,7 +6,9 @@
     <h1>cookbook</h1>
     <a href="recipe/add">add recipe</a>
     <table id="id_recipe_table">
-        <tr><td>{{ recipe_title }}</td></tr>
+        {% for recipe in recipes %}
+        <tr><td>{{ recipe.title }}</td></tr>
+        {% endfor %}
     </table>
     </body>
 </html>
