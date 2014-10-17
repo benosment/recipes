@@ -1,10 +1,9 @@
-import unittest
-
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class NewRecipeTest(unittest.TestCase):
+class NewRecipeTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -19,7 +18,7 @@ class NewRecipeTest(unittest.TestCase):
 
     def test_can_add_a_recipe(self):
         # Ben goes to the recipe website homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # He notices the page title and header mention cookbook
         self.assertIn('cookbook', self.browser.title)
@@ -132,6 +131,3 @@ class NewRecipeTest(unittest.TestCase):
         # TODO -- click on a recipe takes you to the recipe page, verify info
         # TODO -- edit a recipe
 
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
