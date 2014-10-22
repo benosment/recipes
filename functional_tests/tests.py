@@ -32,6 +32,11 @@ class NewRecipeTest(LiveServerTestCase):
         # He clicks on the link and new page appears
         add_link.click()
 
+        # When he adds a new recipe (TODO: maybe should be start button)
+        # he is taken to a new URL
+        ben_url = self.browser.current_url
+        self.assertRegex(ben_url, '/users/.*/add_recipe')
+
         # He sees a form with a textbox for name, ingredients, directions and servings
         # along with a 'cancel' and 'add' button
         header_text = self.browser.find_element_by_tag_name('h1').text
@@ -110,10 +115,39 @@ class NewRecipeTest(LiveServerTestCase):
         self.check_for_row_in_list_table('Grilled Halibut with Mango-Avocado Salsa')
         self.check_for_row_in_list_table('Yogurt-Marinated Grilled Chicken')
 
+        # He closes his browser
+        self.browser.quit()
+        ## Note: we use a new instance of Firefox to make sure no information from cookies
+        ## is bleeding through
+        self.browser = webdriver.Firefox()
+
+        # Sarah visits the home page. There is no sign of Ben's items
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
+        self.assertNotIn('Yogurt-Marinated Grilled Chicken', page_text)
+
+        # Sarah then adds a recipe
+        add_link = self.browser.find_element_by_link_text('add recipe')
+        add_link.click()
+        name_textbox = self.browser.find_element_by_id('id_title')
+        add_button = self.browser.find_element_by_id('id_add_button')
+        name_textbox.send_keys('Beer Braised Bratwurst')
+        add_button.click()
+
+        # Sarah gets her own unique URL
+        sarah_url = self.browser.current_url
+        self.assertRegex(sarah_url, '/users/.+')
+        self.assertNotEqual(sarah_url, ben_url)
+
+        # There is still no sign of Ben's recipes
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
+        self.assertNotIn('Yogurt-Marinated Grilled Chicken', page_text)
+
         self.fail('Finish the test')
 
-        # He closes his browser
-
+        # Ben checks if he can go back to his URL
         # He then reopens his browser and sees that the recipe that he added is still there
 
         # He changes his mind and cancels
@@ -127,7 +161,7 @@ class NewRecipeTest(LiveServerTestCase):
         # rows = table.find_element_by_tag_name('tr')
         #self.assertEqual(len(rows), 1)
 
-        # TODO -- add a second recipe
+
         # TODO -- click on a recipe takes you to the recipe page, verify info
         # TODO -- edit a recipe
 
