@@ -3,12 +3,10 @@
     <title>cookbook</title>
 </head>
 <body>
-    <h1>cookbook</h1>
-    <a href="recipe/add">add recipe</a>
-    <table id="id_recipe_table">
-        {% for recipe in recipes %}
-        <tr><td>{{ recipe.title }}</td></tr>
-        {% endfor %}
-    </table>
+    <h1>enter your name to start a new cookbook or retrieve an existing</h1>
+    <form method="POST">
+        <input name="username_text" id="id_username" placeholder="Enter your name" />
+        {% csrf_token %}
+    </form>
     </body>
 </html>

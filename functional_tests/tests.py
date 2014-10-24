@@ -25,6 +25,15 @@ class NewRecipeTest(LiveServerTestCase):
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('cookbook', header_text)
 
+        # Ben enters his name
+        username_input = self.browser.find_element_by_id('id_username')
+        username_input.send_keys('ben')
+        username_input.send_keys(Keys.ENTER)
+
+        # Ben goes to a unique URL
+        ben_url = self.browser.current_url
+        self.assertRegex(ben_url, '/users/.+')
+
         # He is invited to click on a link to add a new recipe
         add_link = self.browser.find_element_by_link_text('add recipe')
         self.assertIn('add recipe', add_link.text)
@@ -32,10 +41,8 @@ class NewRecipeTest(LiveServerTestCase):
         # He clicks on the link and new page appears
         add_link.click()
 
-        # When he adds a new recipe (TODO: maybe should be start button)
-        # he is taken to a new URL
-        ben_url = self.browser.current_url
-        self.assertRegex(ben_url, '/users/.*/add_recipe')
+        # When he adds a new recipe, he is taken to a new URL
+        self.assertRegex(self.browser.current_url, '/users/.*/add_recipe')
 
         # He sees a form with a textbox for name, ingredients, directions and servings
         # along with a 'cancel' and 'add' button
@@ -121,8 +128,18 @@ class NewRecipeTest(LiveServerTestCase):
         ## is bleeding through
         self.browser = webdriver.Firefox()
 
-        # Sarah visits the home page. There is no sign of Ben's items
+        # Sarah visits the home page and enters her name.
         self.browser.get(self.live_server_url)
+        username_input = self.browser.find_element_by_id('id_username')
+        username_input.send_keys('sarah')
+        username_input.send_keys(Keys.ENTER)
+
+        # Sarah gets her own unique URL
+        sarah_url = self.browser.current_url
+        self.assertRegex(sarah_url, '/users/.+')
+        self.assertNotEqual(sarah_url, ben_url)
+
+        # There is no sign of Ben's items
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
         self.assertNotIn('Yogurt-Marinated Grilled Chicken', page_text)
@@ -135,21 +152,26 @@ class NewRecipeTest(LiveServerTestCase):
         name_textbox.send_keys('Beer Braised Bratwurst')
         add_button.click()
 
-        # Sarah gets her own unique URL
-        sarah_url = self.browser.current_url
-        self.assertRegex(sarah_url, '/users/.+')
-        self.assertNotEqual(sarah_url, ben_url)
-
         # There is still no sign of Ben's recipes
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
         self.assertNotIn('Yogurt-Marinated Grilled Chicken', page_text)
 
-        self.fail('Finish the test')
+        # She closes his browser
+        self.browser.quit()
+        ## Note: we use a new instance of Firefox to make sure no information from cookies
+        ## is bleeding through
+        self.browser = webdriver.Firefox()
 
         # Ben checks if he can go back to his URL
         # He then reopens his browser and sees that the recipe that he added is still there
+        # TODO -- might want to go directly to the URL instead?
+        self.browser.get(self.live_server_url)
+        username_input = self.browser.find_element_by_id('id_username')
+        username_input.send_keys('ben')
+        username_input.send_keys(Keys.ENTER)
 
+        self.fail('Finish the test')
         # He changes his mind and cancels
         # cancel_button = self.browser.find_element_by_name('id_cancel_button')
         #cancel_button.click()

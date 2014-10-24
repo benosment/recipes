@@ -19,16 +19,6 @@ class HomeTest(TestCase):
         expected_html = render_to_string('home.html')
         self.assertEqual(response.content.decode(), expected_html)
 
-    def test_home_page_displays_all_recipes(self):
-        Recipe.objects.create(title='cacio e pepe')
-        Recipe.objects.create(title='BA Burger Deluxe')
-
-        request = HttpRequest()
-        response = home(request)
-
-        self.assertIn('cacio e pepe', response.content.decode())
-        self.assertIn('BA Burger Deluxe', response.content.decode())
-
 
 class AddTest(TestCase):
 
@@ -51,7 +41,7 @@ class AddTest(TestCase):
         response = add(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/users/ben/')
 
 
 class RecipeModelTest(TestCase):
@@ -78,3 +68,19 @@ class RecipeModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.title, 'cacio e pepe')
         self.assertEqual(second_saved_item.title, 'BA Burger Deluxe')
+
+
+class UserViewTest(TestCase):
+
+    def test_uses_user_template(self):
+        response = self.client.get('/users/ben/')
+        self.assertTemplateUsed(response, 'user.html')
+
+    def test_displays_all_recipes(self):
+        Recipe.objects.create(title='cacio e pepe')
+        Recipe.objects.create(title='BA Burger Deluxe')
+
+        response = self.client.get('/users/ben/')
+
+        self.assertContains(response, 'cacio e pepe')
+        self.assertContains(response, 'BA Burger Deluxe')

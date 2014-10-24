@@ -2,5 +2,6 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
                        url(r'^$', 'recipes.views.home', name='home'),
-                       url(r'^recipe/add$', 'recipes.views.add', name='add'),
+                       url(r'^users/ben/$', 'recipes.views.user', name='user'),
+                       url(r'^users/ben/add_recipe$', 'recipes.views.add', name='add'),
                        )

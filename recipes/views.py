@@ -4,8 +4,9 @@ from recipes.models import Recipe
 
 
 def home(request):
-    recipes = Recipe.objects.all()
-    return render(request, 'home.html', {'recipes': recipes})
+    if request.method == 'POST':
+        return redirect('/users/ben/')
+    return render(request, 'home.html')
 
 
 def add(request):
@@ -16,6 +17,11 @@ def add(request):
         recipe.directions = request.POST.get('recipe_directions', '')
         recipe.servings = request.POST.get('recipe_servings', '')
         recipe.save()
-        return redirect('/')
+        return redirect('/users/ben/')
 
     return render(request, 'add.html')
+
+
+def user(request):
+    recipes = Recipe.objects.all()
+    return render(request, 'user.html', {'recipes': recipes})
