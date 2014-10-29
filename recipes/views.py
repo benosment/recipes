@@ -4,12 +4,15 @@ from recipes.models import Recipe
 
 
 def home(request):
-    if request.method == 'POST':
-        return redirect('/users/ben/')
     return render(request, 'home.html')
 
 
-def add(request):
+def add_user(request):
+    if request.method == 'POST':
+        return redirect('/users/ben/')
+
+
+def add_recipe(request):
     if request.method == 'POST':
         recipe = Recipe()
         recipe.title = request.POST.get('recipe_title', '')

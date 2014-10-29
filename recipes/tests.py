@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
-from recipes.views import home, add
+from recipes.views import home
 from recipes.models import Recipe
 
 
@@ -20,28 +20,19 @@ class HomeTest(TestCase):
         self.assertEqual(response.content.decode(), expected_html)
 
 
-class AddTest(TestCase):
-
-    def test_add_page_can_save_a_post_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['recipe_title'] = 'chorizo'
-
-        add(request)
-
-        self.assertEqual(Recipe.objects.count(), 1)
-        new_recipe = Recipe.objects.first()
-        self.assertEqual(new_recipe.title, 'chorizo')
-
-    def test_add_page_can_redirect_after_a_post_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['recipe_title'] = 'chorizo'
-
-        response = add(request)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/users/ben/')
+# class NewRecipeTest(TestCase):
+#
+#     def test_save_a_post_request_for_new_recipe(self):
+#         self.client.post('/users/ben/recipes/new',
+#                          data={'recipe_title': 'New recipe'})
+#         self.assertEqual(Recipe.objects.count(), 1)
+#         new_recipe = Recipe.objects.first()
+#         self.assertEqual(new_recipe.title, 'New recipe')
+#
+#     def test_redirects_after_post(self):
+#         response = self.client.post('/users/ben/recipes/new',
+#                                     data={'recipe_title': 'Caico e pepe'})
+#         self.assertRedirects(response, '/users/ben/recipes/caico-e-pepe')
 
 
 class RecipeModelTest(TestCase):
@@ -84,3 +75,18 @@ class UserViewTest(TestCase):
 
         self.assertContains(response, 'cacio e pepe')
         self.assertContains(response, 'BA Burger Deluxe')
+
+
+class NewUserTest(TestCase):
+
+    # def test_save_a_post_request_for_new_user(self):
+    #     self.client.post('/users/new',
+    #                      data={'username': 'ben'})
+    #     self.assertEqual(User.objects.count(), 1)
+    #     new_user = User.objects.first()
+    #     self.assertEqual(new_user.name, 'ben')
+
+    def test_redirects_after_a_post(self):
+        response = self.client.post('/users/new',
+                                    data={'username': 'ben'})
+        self.assertRedirects(response, '/users/ben/')
