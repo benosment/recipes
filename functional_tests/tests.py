@@ -42,7 +42,7 @@ class NewRecipeTest(LiveServerTestCase):
         add_link.click()
 
         # When he adds a new recipe, he is taken to a new URL
-        self.assertRegex(self.browser.current_url, '/users/.*/add_recipe')
+        self.assertRegex(self.browser.current_url, '/users/.*/recipe/new')
 
         # He sees a form with a textbox for name, ingredients, directions and servings
         # along with a 'cancel' and 'add' button

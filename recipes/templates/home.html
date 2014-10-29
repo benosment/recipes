@@ -4,7 +4,7 @@
 </head>
 <body>
     <h1>enter your name to start a new cookbook or retrieve an existing</h1>
-    <form method="POST">
+    <form method="POST" action="/users/new">
         <input name="username" id="id_username" placeholder="Enter your name" />
         {% csrf_token %}
     </form>
