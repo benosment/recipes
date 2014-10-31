@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 
 from recipes.views import home
-from recipes.models import Recipe
+from recipes.models import Recipe, User
 
 
 class HomeTest(TestCase):
@@ -35,14 +35,18 @@ class HomeTest(TestCase):
 #         self.assertRedirects(response, '/users/ben/recipes/caico-e-pepe')
 
 
-class RecipeModelTest(TestCase):
+class UserAndRecipeModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
+        user = User()
+        user.save()
+
         recipe1 = Recipe()
         recipe1.title = 'cacio e pepe'
         recipe1.ingredients = 'kosher salt\n6 oz. pasta \n3 Tbsp. unsalted butter\n 1 tsp. freshly cracked black pepper'
         recipe1.directions = 'bring water to a boil\ncook pasta\nadd butter and pepper'
         recipe1.servings = '4'
+        recipe1.user = user
         recipe1.save()
 
         recipe2 = Recipe()
@@ -50,7 +54,11 @@ class RecipeModelTest(TestCase):
         recipe2.ingredients = '1 1/2 pounds ground chunk\nkosher salt\n4 slices American cheese\n 4 potato rolls'
         recipe2.directions = 'divide meat into 4 equal portions\nBuild a medium-hot fire\nCook for 4 mins, flip then 3'
         recipe2.servings = '4'
+        recipe2.user = user
         recipe2.save()
+
+        saved_user = User.objects.first()
+        self.assertEqual(saved_user, user)
 
         saved_items = Recipe.objects.all()
         self.assertEqual(saved_items.count(), 2)
@@ -58,7 +66,9 @@ class RecipeModelTest(TestCase):
         first_saved_item = saved_items[0]
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.title, 'cacio e pepe')
+        self.assertEqual(first_saved_item.user, user)
         self.assertEqual(second_saved_item.title, 'BA Burger Deluxe')
+        self.assertEqual(second_saved_item.user, user)
 
 
 class UserViewTest(TestCase):
@@ -68,8 +78,11 @@ class UserViewTest(TestCase):
         self.assertTemplateUsed(response, 'user.html')
 
     def test_displays_all_recipes(self):
-        Recipe.objects.create(title='cacio e pepe')
-        Recipe.objects.create(title='BA Burger Deluxe')
+        user = User()
+        user.save()
+
+        Recipe.objects.create(title='cacio e pepe', user=user)
+        Recipe.objects.create(title='BA Burger Deluxe', user=user)
 
         response = self.client.get('/users/ben/')
 
@@ -79,12 +92,12 @@ class UserViewTest(TestCase):
 
 class NewUserTest(TestCase):
 
-    # def test_save_a_post_request_for_new_user(self):
-    #     self.client.post('/users/new',
-    #                      data={'username': 'ben'})
-    #     self.assertEqual(User.objects.count(), 1)
-    #     new_user = User.objects.first()
-    #     self.assertEqual(new_user.name, 'ben')
+    def test_save_a_post_request_for_new_user(self):
+        self.client.post('/users/new',
+                         data={'username': 'ben'})
+        self.assertEqual(User.objects.count(), 1)
+        #new_user = User.objects.first()
+        #self.assertEqual(new_user.name, 'ben')
 
     def test_redirects_after_a_post(self):
         response = self.client.post('/users/new',

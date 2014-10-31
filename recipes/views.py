@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 
-from recipes.models import Recipe
+from recipes.models import Recipe, User
 
 
 def home(request):
@@ -8,8 +8,8 @@ def home(request):
 
 
 def add_user(request):
-    if request.method == 'POST':
-        return redirect('/users/ben/')
+    user = User.objects.create()
+    return redirect('/users/ben/', {'user': user})
 
 
 def add_recipe(request):
@@ -19,6 +19,7 @@ def add_recipe(request):
         recipe.ingredients = request.POST.get('recipe_ingredients', '')
         recipe.directions = request.POST.get('recipe_directions', '')
         recipe.servings = request.POST.get('recipe_servings', '')
+        #recipe.user = request.POST.get('user', '')
         recipe.save()
         return redirect('/users/ben/')
 
