@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
-{% block header_text %}enter your name to start a new cookbook or retrieve an existing {% endblock %}
-
-{% block body_content %}
-    <form method="POST" action="/users/new">
-        <input name="username" id="id_username" placeholder="Enter your name" />
-        {% csrf_token %}
-    </form>
+{% block beginning_div %}
+<div class="jumbotron">
+  <h1>Hello!</h1>
+  <p>Manage your recipes</p>
+  <p><a href="/users/new" class="btn btn-primary btn-lg" role="button" id="id_get_started_button">Get started</a></p>
+</div>
 {% endblock %}
+
+
+

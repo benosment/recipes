@@ -6,7 +6,15 @@ from recipes.models import Recipe, User
 def home(request):
     return render(request, 'home.html')
 
+    
+def about(request):
+    return render(request, 'about.html')
 
+    
+def contact(request):
+    return render(request, 'contact.html')
+
+    
 def add_user(request):
     user_ = User.objects.create()
     return redirect('/users/%d/' % user_.id, {'user': user_})
