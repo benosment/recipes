@@ -1,13 +1,12 @@
-<html>
-<head>
-    <title>cookbook</title>
-</head>
-<body>
-<h1>add recipe</h1>
+{% extends 'base.html' %}
+
+{% block header_text %} add recipe {%  endblock %}
+
+{% block body_content %}
 <br>
 <br>
 <form method="POST">
-    {%  csrf_token %}
+    {% csrf_token %}
 
     <label for="id_title">Title</label>
     <input name="recipe_title" id="id_title" placeholder="Enter the title of the recipe"/>
@@ -28,5 +27,4 @@
 
     <input id="id_add_button" type="submit" value="Add">
 </form>
-</body>
-</html>
+{% endblock %}

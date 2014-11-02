@@ -1,12 +1,10 @@
-<html>
-<head>
-    <title>cookbook</title>
-</head>
-<body>
-    <h1>enter your name to start a new cookbook or retrieve an existing</h1>
+{% extends 'base.html' %}
+
+{% block header_text %}enter your name to start a new cookbook or retrieve an existing {% endblock %}
+
+{% block body_content %}
     <form method="POST" action="/users/new">
         <input name="username" id="id_username" placeholder="Enter your name" />
         {% csrf_token %}
     </form>
-    </body>
-</html>
+{% endblock %}

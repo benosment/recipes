@@ -1,14 +1,12 @@
-<html>
-<head>
-    <title>cookbook</title>
-</head>
-<body>
-    <h1>cookbook</h1>
+{% extends 'base.html' %}
+
+{% block header_text %}cookbook{% endblock %}
+
+{% block body_content %}
     <a href="/users/{{ user.id }}/add_recipe">add recipe</a>
     <table id="id_recipe_table">
         {% for recipe in user.recipe_set.all %}
         <tr><td>{{ recipe.title }}</td></tr>
         {% endfor %}
     </table>
-    </body>
-</html>
+{% endblock %}
