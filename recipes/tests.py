@@ -74,20 +74,26 @@ class UserAndRecipeModelTest(TestCase):
 class UserViewTest(TestCase):
 
     def test_uses_user_template(self):
-        response = self.client.get('/users/ben/')
+        user = User.objects.create()
+        response = self.client.get('/users/%d/' % user.id)
         self.assertTemplateUsed(response, 'user.html')
 
-    def test_displays_all_recipes(self):
-        user = User()
-        user.save()
+    def test_displays_only_recipes_for_that_user(self):
+        correct_user = User()
+        correct_user.save()
+        other_user = User()
+        other_user.save()
+        Recipe.objects.create(title='cacio e pepe', user=correct_user)
+        Recipe.objects.create(title='BA Burger Deluxe', user=correct_user)
+        Recipe.objects.create(title='salmon', user=other_user)
+        Recipe.objects.create(title='tuna burger', user=other_user)
 
-        Recipe.objects.create(title='cacio e pepe', user=user)
-        Recipe.objects.create(title='BA Burger Deluxe', user=user)
-
-        response = self.client.get('/users/ben/')
+        response = self.client.get('/users/%d/' % correct_user.id)
 
         self.assertContains(response, 'cacio e pepe')
         self.assertContains(response, 'BA Burger Deluxe')
+        self.assertNotContains(response, 'salmon')
+        self.assertNotContains(response, 'tuna burger')
 
 
 class NewUserTest(TestCase):
@@ -102,4 +108,5 @@ class NewUserTest(TestCase):
     def test_redirects_after_a_post(self):
         response = self.client.post('/users/new',
                                     data={'username': 'ben'})
-        self.assertRedirects(response, '/users/ben/')
+        user = User.objects.first()
+        self.assertRedirects(response, '/users/%d/' % user.id)

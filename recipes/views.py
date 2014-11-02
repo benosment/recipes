@@ -8,24 +8,26 @@ def home(request):
 
 
 def add_user(request):
-    user = User.objects.create()
-    return redirect('/users/ben/', {'user': user})
+    user_ = User.objects.create()
+    return redirect('/users/%d/' % user_.id, {'user': user_})
 
 
-def add_recipe(request):
+def add_recipe(request, user_id):
     if request.method == 'POST':
+        user_ = User.objects.get(id=user_id)
         recipe = Recipe()
         recipe.title = request.POST.get('recipe_title', '')
         recipe.ingredients = request.POST.get('recipe_ingredients', '')
         recipe.directions = request.POST.get('recipe_directions', '')
         recipe.servings = request.POST.get('recipe_servings', '')
-        #recipe.user = request.POST.get('user', '')
+        recipe.user = user_
         recipe.save()
-        return redirect('/users/ben/')
+        return redirect('/users/%d/' % int(user_id))
 
     return render(request, 'add.html')
 
 
-def user(request):
-    recipes = Recipe.objects.all()
+def user(request, user_id):
+    user_ = User.objects.get(id=user_id)
+    recipes = Recipe.objects.filter(user=user_)
     return render(request, 'user.html', {'recipes': recipes})
