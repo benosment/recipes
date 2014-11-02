@@ -1,9 +1,9 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class NewRecipeTest(LiveServerTestCase):
+class NewRecipeTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -194,7 +194,7 @@ class NewRecipeTest(LiveServerTestCase):
         # He notices that the input box is nicely centered
         username_input = self.browser.find_element_by_id('id_username')
         self.assertAlmostEqual(username_input.location['x'] + username_input.size['width'] / 2,
-                               512, delta=5)
+                               512, delta=25)
 
         # He enters his name and then clicks to add a recipe. He notices that the new form is also
         # neatly centered.
@@ -204,4 +204,4 @@ class NewRecipeTest(LiveServerTestCase):
         add_link.click()
         name_textbox = self.browser.find_element_by_id('id_title')
         self.assertAlmostEqual(name_textbox.location['x'] + name_textbox.size['width'] / 2,
-                               512, delta=5)
+                               512, delta=25)
