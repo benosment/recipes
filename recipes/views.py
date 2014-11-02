@@ -29,5 +29,4 @@ def add_recipe(request, user_id):
 
 def user(request, user_id):
     user_ = User.objects.get(id=user_id)
-    recipes = Recipe.objects.filter(user=user_)
-    return render(request, 'user.html', {'recipes': recipes})
+    return render(request, 'user.html', {'user': user_})
