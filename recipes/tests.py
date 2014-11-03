@@ -107,6 +107,42 @@ class UserViewTest(TestCase):
         self.assertEqual(response.context['user'], user)
 
 
+class RecipeViewTest(TestCase):
+
+    def test_uses_recipe_template(self):
+        user = User.objects.create()
+        user.save()
+        Recipe.objects.create(title='cacio e pepe', user=user)
+        response = self.client.get('/users/%d/cacio-e-pepe' % user.id)
+        self.assertTemplateUsed(response, 'recipe.html')
+
+    def test_passes_correct_user_and_recipe_to_template(self):
+        user = User.objects.create()
+        user.save()
+        recipe = Recipe.objects.create(title='cacio e pepe', user=user)
+        response = self.client.get('/users/%d/cacio-e-pepe' % user.id)
+        self.assertEqual(response.context['recipe'], recipe)
+
+    def test_displays_valid_recipes_for_that_user(self):
+        user = User.objects.create()
+        user.save()
+        Recipe.objects.create(title='cacio e pepe', user=user)
+        response = self.client.get('/users/%d/cacio-e-pepe' % user.id)
+        self.assertContains(response, 'cacio e pepe')
+
+    def test_does_not_display_invalid_recipes_for_that_user(self):
+        user = User.objects.create()
+        user.save()
+        other_user = User()
+        other_user.save()
+        Recipe.objects.create(title='salmon', user=other_user)
+        response = self.client.get('/users/%d/salmon' % user.id)
+        self.assertNotIn(response, 'salmon')
+
+
+
+
+
 class NewUserTest(TestCase):
 
     def test_save_a_post_request_for_new_user(self):

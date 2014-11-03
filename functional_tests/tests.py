@@ -173,11 +173,22 @@ class NewRecipeTest(StaticLiveServerTestCase):
 
         # Ben checks if he can go back to his URL
         # He then reopens his browser and sees that the recipe that he added is still there
-        # TODO -- might want to go directly to the URL instead?
-        # self.browser.get(self.live_server_url)
-        # username_input = self.browser.find_element_by_id('id_username')
-        # username_input.send_keys('ben')
-        # username_input.send_keys(Keys.ENTER)
+        self.browser.get(ben_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
+        self.assertIn('Yogurt-Marinated Grilled Chicken', page_text)
+
+        # Ben then clicks on a recipe to get the full info
+        recipe_link = self.browser.find_element_by_link_text('Grilled Halibut with Mango-Avocado Salsa')
+        recipe_link.click()
+
+        # He is taken to a new page which has the title in the url
+        self.assertRegex(self.browser.current_url, '/users/(\d+)/recipe/grilled-halibut-with-mango-avocado-salsa')
+
+        # The new page lists all of the ingredients and directions
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn(page_text, '1 medium ripe avocado, peeled and cut into 1/2" dice')
+        self.assertIn(page_text, 'Prepare a grill to medium-high heat. Gently combine the avocado, mango, ')
 
         #self.fail('Finish the test')
         # He changes his mind and cancels
@@ -194,23 +205,3 @@ class NewRecipeTest(StaticLiveServerTestCase):
         # TODO -- click on a recipe takes you to the recipe page, verify info
         # TODO -- edit a recipe
 
-    # def test_layout_and_styling(self):
-    #     # Ben goes to the recipe website homepage
-    #     self.browser.get(self.live_server_url)
-    #     self.browser.set_window_size(1024, 768)
-    #
-    #     # He notices that the input box is nicely centered
-    #
-    #     username_input = self.browser.find_element_by_id('id_username')
-    #     self.assertAlmostEqual(username_input.location['x'] + username_input.size['width'] / 2,
-    #                            512, delta=25)
-    #
-    #     # He enters his name and then clicks to add a recipe. He notices that the new form is also
-    #     # neatly centered.
-    #     username_input.send_keys('ben')
-    #     username_input.send_keys(Keys.ENTER)
-    #     add_link = self.browser.find_element_by_link_text('add recipe')
-    #     add_link.click()
-    #     name_textbox = self.browser.find_element_by_id('id_title')
-    #     self.assertAlmostEqual(name_textbox.location['x'] + name_textbox.size['width'] / 2,
-    #                            512, delta=25)
