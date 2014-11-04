@@ -26,10 +26,10 @@ class NewRecipeTest(TestCase):
         user = User()
         user.save()
         self.client.post('/users/%d/add_recipe' % user.id,
-                         data={'recipe_title': 'New recipe'})
+                         data={'recipe_title': 'new recipe'})
         self.assertEqual(Recipe.objects.count(), 1)
         new_recipe = Recipe.objects.first()
-        self.assertEqual(new_recipe.title, 'New recipe')
+        self.assertEqual(new_recipe.title, 'new recipe')
         self.assertEqual(new_recipe.user, user)
 
     def test_redirects_after_post(self):
@@ -113,21 +113,21 @@ class RecipeViewTest(TestCase):
         user = User.objects.create()
         user.save()
         Recipe.objects.create(title='cacio e pepe', user=user)
-        response = self.client.get('/users/%d/cacio-e-pepe' % user.id)
+        response = self.client.get('/users/%d/recipe/cacio-e-pepe' % user.id)
         self.assertTemplateUsed(response, 'recipe.html')
 
-    def test_passes_correct_user_and_recipe_to_template(self):
+    def test_passes_correct_recipe_to_template(self):
         user = User.objects.create()
         user.save()
         recipe = Recipe.objects.create(title='cacio e pepe', user=user)
-        response = self.client.get('/users/%d/cacio-e-pepe' % user.id)
+        response = self.client.get('/users/%d/recipe/cacio-e-pepe' % user.id)
         self.assertEqual(response.context['recipe'], recipe)
 
     def test_displays_valid_recipes_for_that_user(self):
         user = User.objects.create()
         user.save()
         Recipe.objects.create(title='cacio e pepe', user=user)
-        response = self.client.get('/users/%d/cacio-e-pepe' % user.id)
+        response = self.client.get('/users/%d/recipe/cacio-e-pepe' % user.id)
         self.assertContains(response, 'cacio e pepe')
 
     def test_does_not_display_invalid_recipes_for_that_user(self):
@@ -136,11 +136,8 @@ class RecipeViewTest(TestCase):
         other_user = User()
         other_user.save()
         Recipe.objects.create(title='salmon', user=other_user)
-        response = self.client.get('/users/%d/salmon' % user.id)
-        self.assertNotIn(response, 'salmon')
-
-
-
+        response = self.client.get('/users/%d/recipe/salmon' % user.id)
+        self.assertEqual(response.status_code, 404)
 
 
 class NewUserTest(TestCase):

@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 from recipes.models import Recipe, User
 
@@ -24,7 +24,7 @@ def add_recipe(request, user_id):
     if request.method == 'POST':
         user_ = User.objects.get(id=user_id)
         recipe = Recipe()
-        recipe.title = request.POST.get('recipe_title', '')
+        recipe.title = request.POST.get('recipe_title', '').lower()
         recipe.ingredients = request.POST.get('recipe_ingredients', '')
         recipe.directions = request.POST.get('recipe_directions', '')
         recipe.servings = request.POST.get('recipe_servings', '')
@@ -38,3 +38,12 @@ def add_recipe(request, user_id):
 def user(request, user_id):
     user_ = User.objects.get(id=user_id)
     return render(request, 'user.html', {'user': user_})
+
+
+def view_recipe(request, user_id, recipe_name):
+    user_ = User.objects.get(id=user_id)
+    # TODO -- this should be in a separate function?
+    # convert URL name to title
+    recipe_name = recipe_name.replace('-', ' ')
+    recipe_ = get_object_or_404(Recipe, title=recipe_name, user=user_)
+    return render(request, 'recipe.html', {'recipe': recipe_})
