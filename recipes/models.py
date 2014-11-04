@@ -11,6 +11,9 @@ class Recipe(models.Model):
     directions = models.TextField(default='')
     servings = models.TextField(default='')
     user = models.ForeignKey(User, default=None)
+    url = models.TextField(default='')
+    url_name = models.TextField(default='')
+
 
 
 

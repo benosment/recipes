@@ -112,30 +112,30 @@ class RecipeViewTest(TestCase):
     def test_uses_recipe_template(self):
         user = User.objects.create()
         user.save()
-        Recipe.objects.create(title='cacio e pepe', user=user)
+        Recipe.objects.create(title='cacio e pepe', url_name='cacio-e-pepe', user=user)
         response = self.client.get('/users/%d/recipe/cacio-e-pepe' % user.id)
         self.assertTemplateUsed(response, 'recipe.html')
 
     def test_passes_correct_recipe_to_template(self):
         user = User.objects.create()
         user.save()
-        recipe = Recipe.objects.create(title='cacio e pepe', user=user)
+        recipe = Recipe.objects.create(title='cacio e pepe', url_name='cacio-e-pepe', user=user)
         response = self.client.get('/users/%d/recipe/cacio-e-pepe' % user.id)
         self.assertEqual(response.context['recipe'], recipe)
 
     def test_displays_valid_recipes_for_that_user(self):
         user = User.objects.create()
         user.save()
-        Recipe.objects.create(title='cacio e pepe', user=user)
+        Recipe.objects.create(title='Cacio e Pepe', url_name='cacio-e-pepe', user=user)
         response = self.client.get('/users/%d/recipe/cacio-e-pepe' % user.id)
-        self.assertContains(response, 'cacio e pepe')
+        self.assertContains(response, 'Cacio e Pepe')
 
     def test_does_not_display_invalid_recipes_for_that_user(self):
         user = User.objects.create()
         user.save()
         other_user = User()
         other_user.save()
-        Recipe.objects.create(title='salmon', user=other_user)
+        Recipe.objects.create(title='salmon', url_name='salmon', user=other_user)
         response = self.client.get('/users/%d/recipe/salmon' % user.id)
         self.assertEqual(response.status_code, 404)
 
