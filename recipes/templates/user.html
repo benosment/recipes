@@ -13,7 +13,7 @@
       <div class="col-md-6">
 	   <table id="id_recipe_table">
              {% for recipe in user.recipe_set.all %}
-             <tr><td>{{ recipe.title }}</td></tr>
+             <tr><td><a href="{{ recipe.url }}">{{ recipe.title }}</a></td></tr>
              {% endfor %}
 	   </table>
       </div>

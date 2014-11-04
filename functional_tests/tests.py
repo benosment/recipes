@@ -187,8 +187,8 @@ class NewRecipeTest(StaticLiveServerTestCase):
 
         # The new page lists all of the ingredients and directions
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertIn(page_text, '1 medium ripe avocado, peeled and cut into 1/2" dice')
-        self.assertIn(page_text, 'Prepare a grill to medium-high heat. Gently combine the avocado, mango, ')
+        self.assertIn('1 medium ripe avocado, peeled and cut into 1/2" dice', page_text)
+        self.assertIn('Prepare a grill to medium-high heat. Gently combine the avocado, mango, ', page_text)
 
         #self.fail('Finish the test')
         # He changes his mind and cancels
