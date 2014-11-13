@@ -190,6 +190,40 @@ class NewRecipeTest(StaticLiveServerTestCase):
         self.assertIn('1 medium ripe avocado, peeled and cut into 1/2" dice', page_text)
         self.assertIn('Prepare a grill to medium-high heat. Gently combine the avocado, mango, ', page_text)
 
+        # He then remembers that the servings are for 6 people and a chili pepper is needed. He clicks
+        # on the edit button to start editing
+        edit_button = self.browser.find_element_by_id('id_edit_button')
+        self.assertIn('Edit', edit_button.text)
+        edit_button.click()
+
+        # The edit page shows the same text as before
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('1 medium ripe avocado, peeled and cut into 1/2" dice', page_text)
+        self.assertIn('Prepare a grill to medium-high heat. Gently combine the avocado, mango, ', page_text)
+
+        # He changes the number of servings from 4 to 6
+        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
+        servings_textbox = self.browser.find_element_by_id('id_servings')
+
+        servings_textbox.send_keys('6')
+
+        # He adds chili pepper to the list of ingredients
+        ingredients_textbox.send_keys(Keys.ENTER)
+        ingredients_textbox.send_keys('1 chili pepper')
+
+        # He then clicks the save button
+        save_button = self.browser.find_element_by_id('id_save_button')
+        self.assertIn('Save', save_button.text)
+        save_button.click()
+
+        # He is returned to the recipe page
+        self.assertEqual(self.browser.current_url, ben_url)
+
+        # He can see his changes reflected on the page
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('6', page_text)
+        self.assertIn('1 chili pepper', page_text)
+
         #self.fail('Finish the test')
         # He changes his mind and cancels
         # cancel_button = self.browser.find_element_by_name('id_cancel_button')
@@ -202,6 +236,5 @@ class NewRecipeTest(StaticLiveServerTestCase):
         # rows = table.find_element_by_tag_name('tr')
         #self.assertEqual(len(rows), 1)
 
-        # TODO -- click on a recipe takes you to the recipe page, verify info
-        # TODO -- edit a recipe
+
 

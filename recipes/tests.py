@@ -40,6 +40,45 @@ class NewRecipeTest(TestCase):
         self.assertRedirects(response, '/users/%d/' % user.id)
 
 
+class EditRecipeTest(TestCase):
+
+    def test_save_a_post_request_for_an_existing_recipe(self):
+        user = User()
+        user.save()
+
+        recipe = Recipe()
+        recipe.title = 'cacio e pepe'
+        recipe.url_name = 'cacio-e-pepe'
+        recipe.ingredients = 'kosher salt\n6 oz. pasta \n3 Tbsp. unsalted butter\n 1 tsp. freshly cracked black pepper'
+        recipe.directions = 'bring water to a boil\ncook pasta\nadd butter and pepper'
+        recipe.servings = '4'
+        recipe.user = user
+        recipe.save()
+
+        self.client.post('/users/%d/recipe/%s/save' % (user.id, recipe.url_name),
+                         data={'recipe_title': 'Cacio e Pepe'})
+
+        edited_recipe = Recipe.objects.first()
+        self.assertEqual(edited_recipe.title, 'Cacio e Pepe')
+
+    def test_redirects_after_save(self):
+        user = User()
+        user.save()
+
+        recipe = Recipe()
+        recipe.title = 'cacio e pepe'
+        recipe.url_name = 'cacio-e-pepe'
+        recipe.ingredients = 'kosher salt\n6 oz. pasta \n3 Tbsp. unsalted butter\n 1 tsp. freshly cracked black pepper'
+        recipe.directions = 'bring water to a boil\ncook pasta\nadd butter and pepper'
+        recipe.servings = '4'
+        recipe.user = user
+        recipe.save()
+
+        response = self.client.post('/users/%d/recipe/%s/save' % (user.id, recipe.url_name),
+                                    data={'recipe_title': 'Cacio e Pepe'})
+        self.assertRedirects(response, '/users/%d/' % user.id)
+
+
 class UserAndRecipeModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):

@@ -50,3 +50,17 @@ def view_recipe(request, user_id, recipe_url_name):
     return render(request, 'recipe.html', {'recipe': recipe_,
                                            'ingredients': ingredients,
                                            'directions': directions})
+
+def save_recipe(request, user_id, recipe_url_name):
+    user_ = User.objects.get(id=user_id)
+    recipe = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
+    recipe.title = request.POST.get('recipe_title', '')
+    recipe.ingredients = request.POST.get('recipe_ingredients', '')
+    recipe.directions = request.POST.get('recipe_directions', '')
+    recipe.servings = request.POST.get('recipe_servings', '')
+    recipe.user = user_
+    recipe.url_name = recipe.title.lower().replace(' ', '-')
+    recipe.url = '/users/%s/recipe/%s' % (user_id, recipe.url_name)
+    recipe.save()
+    return redirect('/users/%d/' % int(user_id))
+
