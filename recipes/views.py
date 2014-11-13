@@ -45,4 +45,8 @@ def user(request, user_id):
 def view_recipe(request, user_id, recipe_url_name):
     user_ = User.objects.get(id=user_id)
     recipe_ = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
-    return render(request, 'recipe.html', {'recipe': recipe_})
+    ingredients = recipe_.ingredients.split('\n')
+    directions = recipe_.directions.split('\n')
+    return render(request, 'recipe.html', {'recipe': recipe_,
+                                           'ingredients': ingredients,
+                                           'directions': directions})
