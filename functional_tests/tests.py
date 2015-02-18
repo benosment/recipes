@@ -204,7 +204,6 @@ class NewRecipeTest(StaticLiveServerTestCase):
         # He changes the number of servings from 4 to 6
         ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         servings_textbox = self.browser.find_element_by_id('id_servings')
-
         servings_textbox.send_keys('6')
 
         # He adds chili pepper to the list of ingredients
@@ -217,7 +216,7 @@ class NewRecipeTest(StaticLiveServerTestCase):
         save_button.click()
 
         # He is returned to the recipe page
-        self.assertEqual(self.browser.current_url, ben_url)
+        self.assertRegex(self.browser.current_url, '/users/(\d+)/recipe/grilled-halibut-with-mango-avocado-salsa')
 
         # He can see his changes reflected on the page
         page_text = self.browser.find_element_by_tag_name('body').text

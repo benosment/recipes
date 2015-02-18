@@ -47,20 +47,25 @@ def view_recipe(request, user_id, recipe_url_name):
     recipe_ = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
     ingredients = recipe_.ingredients.split('\n')
     directions = recipe_.directions.split('\n')
-    return render(request, 'recipe.html', {'recipe': recipe_,
+    return render(request, 'recipe.html', {'user_id': user_id,
+                                           'recipe': recipe_,
                                            'ingredients': ingredients,
                                            'directions': directions})
 
-def save_recipe(request, user_id, recipe_url_name):
+def edit_recipe(request, user_id, recipe_url_name):
     user_ = User.objects.get(id=user_id)
-    recipe = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
-    recipe.title = request.POST.get('recipe_title', '')
-    recipe.ingredients = request.POST.get('recipe_ingredients', '')
-    recipe.directions = request.POST.get('recipe_directions', '')
-    recipe.servings = request.POST.get('recipe_servings', '')
-    recipe.user = user_
-    recipe.url_name = recipe.title.lower().replace(' ', '-')
-    recipe.url = '/users/%s/recipe/%s' % (user_id, recipe.url_name)
-    recipe.save()
-    return redirect('/users/%d/' % int(user_id))
+    recipe_ = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
+    if request.method == 'POST':
+        recipe_.title = request.POST.get('recipe_title', '')
+        recipe_.ingredients = request.POST.get('recipe_ingredients', '')
+        recipe_.directions = request.POST.get('recipe_directions', '')
+        recipe_.servings = request.POST.get('recipe_servings', '')
+        recipe_.save()
+        return redirect('/users/%d/recipe/%s' % (int(user_id), recipe_.url_name))
+    ingredients = recipe_.ingredients.split('\n')
+    directions = recipe_.directions.split('\n')
+    return render(request, 'edit.html', {'user_id': user_id,
+                                         'recipe': recipe_,
+                                         'ingredients': ingredients,
+                                         'directions': directions})
 

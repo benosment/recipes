@@ -55,7 +55,7 @@ class EditRecipeTest(TestCase):
         recipe.user = user
         recipe.save()
 
-        self.client.post('/users/%d/recipe/%s/save' % (user.id, recipe.url_name),
+        self.client.post('/users/%d/recipe/%s/edit' % (user.id, recipe.url_name),
                          data={'recipe_title': 'Cacio e Pepe'})
 
         edited_recipe = Recipe.objects.first()
@@ -74,9 +74,9 @@ class EditRecipeTest(TestCase):
         recipe.user = user
         recipe.save()
 
-        response = self.client.post('/users/%d/recipe/%s/save' % (user.id, recipe.url_name),
+        response = self.client.post('/users/%d/recipe/%s/edit' % (user.id, recipe.url_name),
                                     data={'recipe_title': 'Cacio e Pepe'})
-        self.assertRedirects(response, '/users/%d/' % user.id)
+        self.assertRedirects(response, '/users/%d/recipe/%s' % (user.id, recipe.url_name))
 
 
 class UserAndRecipeModelTest(TestCase):
