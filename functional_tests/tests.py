@@ -1,9 +1,25 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+import sys
 
 
 class NewRecipeTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
+
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -18,7 +34,7 @@ class NewRecipeTest(StaticLiveServerTestCase):
 
     def test_can_add_a_recipe(self):
         # Ben goes to the recipe website homepage
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
         # He notices the page title mention cookbook
         self.assertIn('cookbook', self.browser.title)
@@ -127,12 +143,12 @@ class NewRecipeTest(StaticLiveServerTestCase):
 
         # He closes his browser
         self.browser.quit()
-        ## Note: we use a new instance of Firefox to make sure no information from cookies
-        ## is bleeding through
+        # Note: we use a new instance of Firefox to make sure no information from cookies
+        # is bleeding through
         self.browser = webdriver.Firefox()
 
         # Sarah visits the home page and enters her name.
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         # username_input = self.browser.find_element_by_id('id_username')
         # username_input.send_keys('sarah')
         # username_input.send_keys(Keys.ENTER)
@@ -167,8 +183,8 @@ class NewRecipeTest(StaticLiveServerTestCase):
 
         # She closes his browser
         self.browser.quit()
-        ## Note: we use a new instance of Firefox to make sure no information from cookies
-        ## is bleeding through
+        # Note: we use a new instance of Firefox to make sure no information from cookies
+        # is bleeding through
         self.browser = webdriver.Firefox()
 
         # Ben checks if he can go back to his URL
@@ -202,11 +218,11 @@ class NewRecipeTest(StaticLiveServerTestCase):
         self.assertIn('Prepare a grill to medium-high heat. Gently combine the avocado, mango, ', page_text)
 
         # He changes the number of servings from 4 to 6
-        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         servings_textbox = self.browser.find_element_by_id('id_servings')
         servings_textbox.send_keys('6')
 
         # He adds chili pepper to the list of ingredients
+        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('1 chili pepper')
 
