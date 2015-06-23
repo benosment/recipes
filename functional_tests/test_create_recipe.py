@@ -12,14 +12,20 @@ class RecipeCreateTest(FunctionalTest):
         # He notices the page title mention cookbook
         self.assertIn('cookbook', self.browser.title)
 
-        # Ben clicks the 'get started button'
+        # He is invited to enter his name to create his own cookbook or
+        # view other user's cookbook's
+        # Ben wants to create his own right now, so he enters his name
+        # and then clicks the 'get started button'
+        username_input = self.browser.find_element_by_id('id_username')
+        username_input.send_keys('ben')
+        username_input.send_keys(Keys.ENTER)
         get_started_button = self.browser.find_element_by_id('id_get_started_button')
         self.assertIn('Get started', get_started_button.text)
         get_started_button.click()
 
-        # Ben goes to a unique URL
+        # Ben goes to a unique URL which includes his name
         ben_url = self.browser.current_url
-        self.assertRegex(ben_url, '/users/.+')
+        self.assertRegex(ben_url, '/users/ben.+')
 
         # He is invited to click on a link to add a new recipe
         add_recipe_button = self.browser.find_element_by_id('id_add_recipe_button')
@@ -117,9 +123,9 @@ class RecipeCreateTest(FunctionalTest):
 
         # Sarah visits the home page and enters her name.
         self.browser.get(self.server_url)
-        # username_input = self.browser.find_element_by_id('id_username')
-        # username_input.send_keys('sarah')
-        # username_input.send_keys(Keys.ENTER)
+        username_input = self.browser.find_element_by_id('id_username')
+        username_input.send_keys('sarah')
+        username_input.send_keys(Keys.ENTER)
 
         get_started_button = self.browser.find_element_by_id('id_get_started_button')
         self.assertIn('Get started', get_started_button.text)
@@ -127,7 +133,7 @@ class RecipeCreateTest(FunctionalTest):
 
         # Sarah gets her own unique URL
         sarah_url = self.browser.current_url
-        self.assertRegex(sarah_url, '/users/.+')
+        self.assertRegex(sarah_url, '/users/sarah.+')
         self.assertNotEqual(sarah_url, ben_url)
 
         # There is no sign of Ben's items
@@ -162,4 +168,13 @@ class RecipeCreateTest(FunctionalTest):
         self.assertIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
         self.assertIn('Yogurt-Marinated Grilled Chicken', page_text)
 
-
+        # Ben goes back to the recipe home site
+        self.browser.get(self.server_url)
+        # He notices that Ben's and Sarah's cookbooks are listed
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Ben', page_text)
+        self.assertIn('Sarah', page_text)
+        ben_cookbook_link = self.browser.find_element_by_link_text("Ben's cookbook")
+        ben_cookbook_link.click()
+        # He clicks the link for his cookbook and notices it is the same as his URL from before
+        self.assertEqual(self.browser.current_url, ben_url)

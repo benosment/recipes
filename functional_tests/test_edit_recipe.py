@@ -12,14 +12,21 @@ class RecipeEditTest(FunctionalTest):
         # He notices the page title mention cookbook
         self.assertIn('cookbook', self.browser.title)
 
-        # Ben clicks the 'get started button'
+        # He is invited to enter his name to create his own cookbook or
+        # view other user's cookbook's
+        # Ben wants to create his own right now, so he enters his name
+        # and then clicks the 'get started button'
+        # TODO -- duplication here. consider refactoring if there is a third instance
+        username_input = self.browser.find_element_by_id('id_username')
+        username_input.send_keys('ben')
+        username_input.send_keys(Keys.ENTER)
         get_started_button = self.browser.find_element_by_id('id_get_started_button')
         self.assertIn('Get started', get_started_button.text)
         get_started_button.click()
 
-        # Ben goes to a unique URL
+        # Ben goes to a unique URL which includes his name
         ben_url = self.browser.current_url
-        self.assertRegex(ben_url, '/users/.+')
+        self.assertRegex(ben_url, '/users/ben.+')
 
         # He is invited to click on a link to add a new recipe
         add_recipe_button = self.browser.find_element_by_id('id_add_recipe_button')
