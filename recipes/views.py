@@ -53,6 +53,7 @@ def view_recipe(request, user_name, recipe_url_name):
                                            'ingredients': ingredients,
                                            'directions': directions})
 
+
 def edit_recipe(request, user_name, recipe_url_name):
     user_ = User.objects.get(name=user_name)
     recipe_ = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
