@@ -10,7 +10,8 @@ def home(request):
         user_.name = user_.display_name.lower()
         user_.save()
         return redirect('/users/%s/' % user_.name, {'user': user_})
-    return render(request, 'home.html')
+    users = User.objects.all()
+    return render(request, 'home.html', {'users': users})
 
 
 def about(request):

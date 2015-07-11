@@ -13,6 +13,17 @@
     <button type="submit" id="id_get_started_button" class="btn btn-primary">Get Started</button>
   </form>
 </div>
+
+<div class="row">
+  <h1>Existing users:</h1>
+  <div class="col-md-6">
+  <table id="id_users_table" class="table">
+     {% for user in users %}
+         <tr><td><a href="/users/{{ user.name }}/">{{ user.display_name}}</a></td></tr>
+     {% endfor %}
+  </table>
+  </div>
+</div>
 {% endblock %}
 
 

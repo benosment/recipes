@@ -17,7 +17,7 @@ class RecipeCreateTest(FunctionalTest):
         # Ben wants to create his own right now, so he enters his name
         # and then clicks the 'get started button'
         username_input = self.browser.find_element_by_id('id_username')
-        username_input.send_keys('ben')
+        username_input.send_keys('Ben')
         username_input.send_keys(Keys.ENTER)
 
         # Ben goes to a unique URL which includes his name
@@ -121,7 +121,7 @@ class RecipeCreateTest(FunctionalTest):
         # Sarah visits the home page and enters her name.
         self.browser.get(self.server_url)
         username_input = self.browser.find_element_by_id('id_username')
-        username_input.send_keys('sarah')
+        username_input.send_keys('Sarah')
         username_input.send_keys(Keys.ENTER)
 
         # Sarah gets her own unique URL
@@ -167,7 +167,11 @@ class RecipeCreateTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Ben', page_text)
         self.assertIn('Sarah', page_text)
-        ben_cookbook_link = self.browser.find_element_by_link_text("Ben's cookbook")
+        ben_cookbook_link = self.browser.find_element_by_link_text("Ben")
         ben_cookbook_link.click()
         # He clicks the link for his cookbook and notices it is the same as his URL from before
         self.assertEqual(self.browser.current_url, ben_url)
+        # He sees his two recipes that he added earlier
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Grilled Halibut with Mango-Avocado Salsa', page_text)
+        self.assertIn('Yogurt-Marinated Grilled Chicken', page_text)
