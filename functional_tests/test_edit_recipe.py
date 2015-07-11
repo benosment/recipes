@@ -20,9 +20,6 @@ class RecipeEditTest(FunctionalTest):
         username_input = self.browser.find_element_by_id('id_username')
         username_input.send_keys('ben')
         username_input.send_keys(Keys.ENTER)
-        get_started_button = self.browser.find_element_by_id('id_get_started_button')
-        self.assertIn('Get started', get_started_button.text)
-        get_started_button.click()
 
         # Ben goes to a unique URL which includes his name
         ben_url = self.browser.current_url
@@ -103,7 +100,7 @@ class RecipeEditTest(FunctionalTest):
         recipe_link.click()
 
         # He is taken to a new page which has the title in the url
-        self.assertRegex(self.browser.current_url, '/users/(\d+)/recipe/grilled-halibut-with-mango-avocado-salsa')
+        self.assertRegex(self.browser.current_url, '/users/(\S+)/recipe/grilled-halibut-with-mango-avocado-salsa')
 
         # The new page lists all of the ingredients and directions
         page_text = self.browser.find_element_by_tag_name('body').text
@@ -137,7 +134,7 @@ class RecipeEditTest(FunctionalTest):
         save_button.click()
 
         # He is returned to the recipe page
-        self.assertRegex(self.browser.current_url, '/users/(\d+)/recipe/grilled-halibut-with-mango-avocado-salsa')
+        self.assertRegex(self.browser.current_url, '/users/(\S+)/recipe/grilled-halibut-with-mango-avocado-salsa')
 
         # He can see his changes reflected on the page
         page_text = self.browser.find_element_by_tag_name('body').text

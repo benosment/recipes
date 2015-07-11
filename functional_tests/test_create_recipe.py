@@ -19,9 +19,6 @@ class RecipeCreateTest(FunctionalTest):
         username_input = self.browser.find_element_by_id('id_username')
         username_input.send_keys('ben')
         username_input.send_keys(Keys.ENTER)
-        get_started_button = self.browser.find_element_by_id('id_get_started_button')
-        self.assertIn('Get started', get_started_button.text)
-        get_started_button.click()
 
         # Ben goes to a unique URL which includes his name
         ben_url = self.browser.current_url
@@ -126,10 +123,6 @@ class RecipeCreateTest(FunctionalTest):
         username_input = self.browser.find_element_by_id('id_username')
         username_input.send_keys('sarah')
         username_input.send_keys(Keys.ENTER)
-
-        get_started_button = self.browser.find_element_by_id('id_get_started_button')
-        self.assertIn('Get started', get_started_button.text)
-        get_started_button.click()
 
         # Sarah gets her own unique URL
         sarah_url = self.browser.current_url
