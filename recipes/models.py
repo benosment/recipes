@@ -2,7 +2,8 @@ from django.db import models
 
 
 class User(models.Model):
-    pass
+    name = models.TextField(default='')
+    display_name = models.TextField(default='')
 
 
 class Recipe(models.Model):

@@ -3,7 +3,19 @@ from django.test import TestCase
 from recipes.models import Recipe, User
 
 
-class UserAndRecipeModelTest(TestCase):
+class UserModelTest(TestCase):
+
+    def test_saving_and_retrieving_items(self):
+        user = User()
+        user.name = 'Sarah'
+        user.save()
+
+        saved_user = User.objects.first()
+        self.assertEqual(saved_user, user)
+        self.assertEqual(saved_user.name, 'Sarah')
+
+
+class RecipeModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
         user = User()
