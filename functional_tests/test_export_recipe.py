@@ -119,6 +119,7 @@ class RecipeExportTest(FunctionalTest):
         export_button = self.browser.find_element_by_id('id_export_button')
 
         # He clicks the export button
+        # TODO -- maybe don't actually click, but use wget/requests to get the file
         export_button.click()
 
         # He receives a zip file
