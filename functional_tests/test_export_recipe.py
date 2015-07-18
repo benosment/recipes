@@ -2,6 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
 
+import os
+import shutil
+import requests
 
 class RecipeExportTest(FunctionalTest):
 
@@ -119,13 +122,24 @@ class RecipeExportTest(FunctionalTest):
         export_button = self.browser.find_element_by_id('id_export_button')
 
         # He clicks the export button
-        # TODO -- maybe don't actually click, but use wget/requests to get the file
-        export_button.click()
+        # don't actually click, but use wget/requests to get the file
+        export_button_url = export_button.get_attribute('href')
+        response = requests.get(export_button_url)
 
         # He receives a zip file
-        # ???
+        zip_content = response.content
+        with open('/tmp/recipes.zip', 'wb') as f:
+            f.write(zip_content)
 
         # He unzips the file and sees his two recipes
+        shutil.unpack_archive('/tmp/recipes.zip', '/tmp')
+        self.assertEqual(len(os.listdir('/tmp/recipes')), 2)
+        lines = []
+        with open('/tmp/recipes/grilled-halibut-with-mango-avocado-salsa') as f:
+            lines = f.readlines()
 
         # He verifies the content of the recipes
-        self.fail()
+        self.assertIn('4 6-ounce halibut or mahi-mahi fillets\n', lines)
+
+        os.remove('/tmp/recipes.zip')
+        shutil.rmtree('/tmp/recipes')
