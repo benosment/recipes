@@ -48,3 +48,7 @@ Assume we have a user account at /home/username
     # start both services
     sudo service nginx reload
     sudo start gunicorn-cookbook.benosment
+
+
+## To Deploy:
+    fab deploy:host=ben@cookbook.benosment.com
