@@ -143,3 +143,43 @@ class RecipeExportTest(FunctionalTest):
 
         os.remove('/tmp/recipes.zip')
         shutil.rmtree('/tmp/recipes')
+
+        # He then edits the recipe to add Gruyere cheese
+        recipe_link = self.browser.find_element_by_link_text('Grilled Halibut with Mango-Avocado Salsa')
+        recipe_link.click()
+        edit_button = self.browser.find_element_by_id('id_edit_button')
+        self.assertIn('Edit', edit_button.text)
+        edit_button.click()
+        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
+        ingredients_textbox.send_keys(Keys.ENTER)
+        ingredients_textbox.send_keys('Gruyère')
+        save_button = self.browser.find_element_by_id('id_save_button')
+        save_button.click()
+
+        # He then goes back to the list of all recipes
+        back_button = self.browser.find_element_by_id('id_back_button')
+        self.assertIn('Back', back_button.text)
+        back_button.click()
+
+        # he exports the recipes again
+        export_button = self.browser.find_element_by_id('id_export_button')
+        export_button_url = export_button.get_attribute('href')
+        response = requests.get(export_button_url)
+
+        # He receives a zip file
+        zip_content = response.content
+        with open('/tmp/recipes.zip', 'wb') as f:
+            f.write(zip_content)
+
+        # He unzips the file and sees his two recipes
+        shutil.unpack_archive('/tmp/recipes.zip', '/tmp')
+        self.assertEqual(len(os.listdir('/tmp/recipes')), 2)
+        lines = []
+        with open('/tmp/recipes/grilled-halibut-with-mango-avocado-salsa') as f:
+            lines = f.readlines()
+
+        # He verifies the content of the recipes
+        self.assertIn('Gruyère\n', lines)
+
+        os.remove('/tmp/recipes.zip')
+        shutil.rmtree('/tmp/recipes')
