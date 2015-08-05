@@ -82,27 +82,32 @@ def edit_recipe(request, user_name, recipe_url_name):
 def export(request, username):
     logging.info('received request to export %s' % username)
     zipdir = os.path.join('/tmp', username, 'recipes')
-    os.makedirs(zipdir)
-    logging.debug('made directory %s' % zipdir)
-    user_ = User.objects.get(name=username)
-    for recipe in user_.recipe_set.all():
-        filename = os.path.join(zipdir, recipe.url_name)
-        with open(filename, 'w') as f:
-            logging.debug('writing %s to %s' % (recipe.title, filename))
-            f.write(recipe.title)
-            f.write('\n\nIngredients:\n')
-            f.write(recipe.ingredients)
-            f.write('\n\nDirections:\n')
-            f.write(recipe.directions)
-            f.write('\n\nServings:\n')
-            f.write(recipe.servings)
-    shutil.make_archive('recipes', 'zip', os.path.join('/tmp', username), 'recipes')
-    shutil.rmtree(zipdir)
-    filename = 'recipes.zip'
-    wrapper = FileWrapper(open(filename, 'rb'))
-    response = HttpResponse(wrapper, content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=recipes.zip'
-    response['Content-Length'] = os.path.getsize(filename)
-    os.remove(filename)
-    logging.debug('removing %s' % filename)
+    try:
+        os.makedirs(zipdir)
+        logging.debug('made directory %s' % zipdir)
+        user_ = User.objects.get(name=username)
+        for recipe in user_.recipe_set.all():
+            filename = os.path.join(zipdir, recipe.url_name)
+            with open(filename, 'w') as f:
+                logging.debug('writing %s to %s' % (recipe.title, filename))
+                f.write(recipe.title)
+                f.write('\n\nIngredients:\n')
+                f.write(recipe.ingredients)
+                f.write('\n\nDirections:\n')
+                f.write(recipe.directions)
+                f.write('\n\nServings:\n')
+                f.write(recipe.servings)
+        shutil.make_archive('recipes', 'zip', os.path.join('/tmp', username), 'recipes')
+        shutil.rmtree(zipdir)
+        filename = 'recipes.zip'
+        wrapper = FileWrapper(open(filename, 'rb'))
+        response = HttpResponse(wrapper, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=recipes.zip'
+        response['Content-Length'] = os.path.getsize(filename)
+        os.remove(filename)
+        logging.debug('removing %s' % filename)
+    except:
+        logging.exception('failed to export')
+        shutil.rmtree(zipdir)
+        response = None
     return response

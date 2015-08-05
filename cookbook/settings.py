@@ -88,24 +88,22 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] [%(funcName)s:%(lineno)d] %(message)s',
+                      'datefmt':'%m/%d/%Y %I:%M:%S %p',
         },
     },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'standard'
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'log.txt',
-            'formatter': 'verbose'
+            'formatter': 'standard'
         },
     },
     'loggers': {
