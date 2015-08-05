@@ -15,11 +15,11 @@
 </ul>
 
 <h3>Directions</h3>
-<ol>
+<ul style="list-style: none;">
     {% for direction in directions %}
-        <li>{{ direction }}</li>
+        <li>{{ direction }}</li> <br>
     {% endfor %}
-</ol>
+</ul>
 
 <h3>Servings</h3>
 {{ recipe.servings }}
