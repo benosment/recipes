@@ -88,7 +88,7 @@ def export(request, username):
         user_ = User.objects.get(name=username)
         for recipe in user_.recipe_set.all():
             filename = os.path.join(zipdir, recipe.url_name)
-            with open(filename, 'w') as f:
+            with open(filename, 'wt', encoding='utf-8') as f:
                 logging.debug('writing %s to %s' % (recipe.title, filename))
                 f.write(recipe.title)
                 f.write('\n\nIngredients:\n')
