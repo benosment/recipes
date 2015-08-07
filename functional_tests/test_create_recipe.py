@@ -44,6 +44,11 @@ class RecipeCreateTest(FunctionalTest):
         ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         directions_textbox = self.browser.find_element_by_id('id_directions')
         servings_textbox = self.browser.find_element_by_id('id_servings')
+        source_textbox = self.browser.find_element_by_id('id_source')
+        source_url_textbox = self.browser.find_element_by_id('id_source_url')
+        cooking_time_textbox = self.browser.find_element_by_id('id_cooking_time')
+        total_time_textbox = self.browser.find_element_by_id('id_total_time')
+        notes_textbox = self.browser.find_element_by_id('id_notes')
         add_button = self.browser.find_element_by_id('id_add_button')
 
         # He types in Grilled Halibut with Mango-Avocado Salsa into the textbox for name
@@ -86,6 +91,12 @@ class RecipeCreateTest(FunctionalTest):
         # He then types in the servings
         servings_textbox.send_keys('4')
 
+        source_textbox.send_keys('Bon Appetit')
+        source_url_textbox.send_keys('http://www.bonappetit.com/recipe/gwyneth-paltrow-s-grilled-halibut-with-mango-avocado-salsa')
+        cooking_time_textbox.send_keys('10 mins')
+        total_time_textbox.send_keys('25 mins')
+        notes_textbox.send_keys('Typically use Mahi instead')
+
         # Finally, he clicks the add button
         add_button.click()
 
@@ -93,6 +104,18 @@ class RecipeCreateTest(FunctionalTest):
 
         # He sees that the recipe appears in the list of recipes
         self.check_for_row_in_list_table('Grilled Halibut with Mango-Avocado Salsa')
+
+        # He clicks on the recipe that he just added to verify the content
+        recipe_link = self.browser.find_element_by_link_text('Grilled Halibut with Mango-Avocado Salsa')
+        recipe_link.click()
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('4 6-ounce halibut or mahi-mahi fillets', page_text)
+        self.assertIn('Typically use Mahi instead', page_text)
+
+        # he then clicks the back button to go back
+        back_button = self.browser.find_element_by_id('id_back_button')
+        self.assertIn('Back', back_button.text)
+        back_button.click()
 
         # He then goes to add another recipe
         add_recipe_button = self.browser.find_element_by_id('id_add_recipe_button')

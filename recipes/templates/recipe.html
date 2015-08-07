@@ -24,4 +24,33 @@
 <h3>Servings</h3>
 {{ recipe.servings }}
 
+{% if recipe.source %}
+<h3>Source</h3>
+{{ recipe.source }}
+{% endif %}
+
+{% if recipe.source_url %}
+<h3>Source URL</h3>
+{{ recipe.source_url }}
+{% endif %}
+
+{% if recipe.cooking_time %}
+<h3>Cooking Time</h3>
+{{ recipe.cooking_time }}
+{% endif %}
+
+{% if recipe.total_time %}
+<h3>Total Time</h3>
+{{ recipe.total_time }}
+{% endif %}
+
+{% if recipe.notes %}
+<h3>Notes</h3>
+<ul style="list-style: none;">
+    {% for note in notes %}
+        <li>{{ note }}</li> <br>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
