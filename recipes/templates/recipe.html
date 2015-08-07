@@ -46,11 +46,7 @@
 
 {% if recipe.notes %}
 <h3>Notes</h3>
-<ul style="list-style: none;">
-    {% for note in notes %}
-        <li>{{ note }}</li> <br>
-    {% endfor %}
-</ul>
+{{ recipe.notes }}
 {% endif %}
 
 {% endblock %}

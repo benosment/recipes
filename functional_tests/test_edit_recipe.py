@@ -128,6 +128,10 @@ class RecipeEditTest(FunctionalTest):
         ingredients_textbox.send_keys(Keys.ENTER)
         ingredients_textbox.send_keys('1 chili pepper')
 
+        # He adds a note for next time
+        notes_textbox = self.browser.find_element_by_id('id_notes')
+        notes_textbox.send_keys("Wasn't that spicy, added a pepper")
+
         # He then clicks the save button
         save_button = self.browser.find_element_by_id('id_save_button')
         self.assertIn('Save', save_button.text)
@@ -141,6 +145,7 @@ class RecipeEditTest(FunctionalTest):
         self.assertIn('8', page_text)
         self.assertNotIn('7', page_text)
         self.assertIn('1 chili pepper', page_text)
+        self.assertIn('added a pepper', page_text)
 
         #self.fail('Finish the test')
         # He changes his mind and cancels
@@ -153,6 +158,3 @@ class RecipeEditTest(FunctionalTest):
         # table = self.browser.find_element_by_id('id_recipe_table')
         # rows = table.find_element_by_tag_name('tr')
         #self.assertEqual(len(rows), 1)
-
-
-

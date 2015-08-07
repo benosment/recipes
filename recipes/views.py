@@ -36,6 +36,11 @@ def add_recipe(request, user_name):
         recipe.ingredients = request.POST.get('recipe_ingredients', '')
         recipe.directions = request.POST.get('recipe_directions', '')
         recipe.servings = request.POST.get('recipe_servings', '')
+        recipe.source = request.POST.get('recipe_source', '')
+        recipe.source_url = request.POST.get('recipe_source_url', '')
+        recipe.cooking_time = request.POST.get('recipe_cooking_time', '')
+        recipe.total_time = request.POST.get('recipe_total_time', '')
+        recipe.notes = request.POST.get('recipe_notes', '')
         recipe.user = user_
         recipe.url_name = recipe.title.lower().replace(' ', '-')
         recipe.url = '/users/%s/recipe/%s' % (user_name, recipe.url_name)
@@ -63,18 +68,23 @@ def view_recipe(request, user_name, recipe_url_name):
 
 def edit_recipe(request, user_name, recipe_url_name):
     user_ = User.objects.get(name=user_name)
-    recipe_ = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
+    recipe = get_object_or_404(Recipe, url_name=recipe_url_name, user=user_)
     if request.method == 'POST':
-        recipe_.title = request.POST.get('recipe_title', '')
-        recipe_.ingredients = request.POST.get('recipe_ingredients', '')
-        recipe_.directions = request.POST.get('recipe_directions', '')
-        recipe_.servings = request.POST.get('recipe_servings', '')
-        recipe_.save()
-        return redirect('/users/%s/recipe/%s' % (user_.name, recipe_.url_name))
-    ingredients = recipe_.ingredients.split('\n')
-    directions = recipe_.directions.split('\n')
+        recipe.title = request.POST.get('recipe_title', '')
+        recipe.ingredients = request.POST.get('recipe_ingredients', '')
+        recipe.directions = request.POST.get('recipe_directions', '')
+        recipe.servings = request.POST.get('recipe_servings', '')
+        recipe.source = request.POST.get('recipe_source', '')
+        recipe.source_url = request.POST.get('recipe_source_url', '')
+        recipe.cooking_time = request.POST.get('recipe_cooking_time', '')
+        recipe.total_time = request.POST.get('recipe_total_time', '')
+        recipe.notes = request.POST.get('recipe_notes', '')
+        recipe.save()
+        return redirect('/users/%s/recipe/%s' % (user_.name, recipe.url_name))
+    ingredients = recipe.ingredients.split('\n')
+    directions = recipe.directions.split('\n')
     return render(request, 'edit.html', {'user_name': user_name,
-                                         'recipe': recipe_,
+                                         'recipe': recipe,
                                          'ingredients': ingredients,
                                          'directions': directions})
 
