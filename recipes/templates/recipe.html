@@ -7,6 +7,10 @@
   <a href="/users/{{ user_name }}" class="btn btn-lg btn-primary" id="id_back_button">Back</a>
 </div>
 
+{% if recipe.img_url %}
+<img src="{{ recipe.img_url }}" class="img-rounded">
+{% endif %}
+
 <h3>Ingredients</h3>
 <ul style="list-style: none;">
     {% for ingredient in ingredients %}

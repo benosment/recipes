@@ -16,6 +16,7 @@ class Recipe(models.Model):
     url_name = models.TextField(default='')
     source = models.TextField(default='')
     source_url = models.TextField(default='')
+    img_url = models.TextField(default='')
     cooking_time = models.TextField(default='')
     total_time = models.TextField(default='')
     notes = models.TextField(default='')

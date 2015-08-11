@@ -46,6 +46,7 @@ class RecipeCreateTest(FunctionalTest):
         servings_textbox = self.browser.find_element_by_id('id_servings')
         source_textbox = self.browser.find_element_by_id('id_source')
         source_url_textbox = self.browser.find_element_by_id('id_source_url')
+        img_url_textbox = self.browser.find_element_by_id('id_img_url')
         cooking_time_textbox = self.browser.find_element_by_id('id_cooking_time')
         total_time_textbox = self.browser.find_element_by_id('id_total_time')
         notes_textbox = self.browser.find_element_by_id('id_notes')
@@ -93,6 +94,7 @@ class RecipeCreateTest(FunctionalTest):
 
         source_textbox.send_keys('Bon Appetit')
         source_url_textbox.send_keys('http://www.bonappetit.com/recipe/gwyneth-paltrow-s-grilled-halibut-with-mango-avocado-salsa')
+        img_url_textbox.send_keys('http://www.bonappetit.com/wp-content/uploads/2010/05/gwyneth-paltrow-s-grilled-halibut-with-mango-avocado-salsa-940x600.jpg')
         cooking_time_textbox.send_keys('10 mins')
         total_time_textbox.send_keys('25 mins')
         notes_textbox.send_keys('Typically use Mahi instead')
