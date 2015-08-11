@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from recipes.models import Recipe, User
 
@@ -51,3 +52,11 @@ class RecipeModelTest(TestCase):
         self.assertEqual(second_saved_item.user, user)
 
 
+    def test_cannot_svae_empty_recipes(self):
+        user = User()
+        user.save()
+
+        recipe = Recipe(user=user, title='', ingredients='', directions='')
+        with self.assertRaises(ValidationError):
+            recipe.save()
+            recipe.full_clean()

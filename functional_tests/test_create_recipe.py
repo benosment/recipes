@@ -128,9 +128,13 @@ class RecipeCreateTest(FunctionalTest):
         # along with a 'cancel' and 'add' button
         name_textbox = self.browser.find_element_by_id('id_title')
         add_button = self.browser.find_element_by_id('id_add_button')
+        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
+        directions_textbox = self.browser.find_element_by_id('id_directions')
 
         # He types in Grilled Halibut with Mango-Avocado Salsa into the textbox for name
         name_textbox.send_keys('Yogurt-Marinated Grilled Chicken')
+        ingredients_textbox.send_keys('yogurt')
+        directions_textbox.send_keys('grill')
         add_button.click()
 
         # He sees that both recipes appear in the list of recipes
@@ -165,7 +169,11 @@ class RecipeCreateTest(FunctionalTest):
 
         name_textbox = self.browser.find_element_by_id('id_title')
         add_button = self.browser.find_element_by_id('id_add_button')
+        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
+        directions_textbox = self.browser.find_element_by_id('id_directions')
         name_textbox.send_keys('Beer Braised Bratwurst')
+        ingredients_textbox.send_keys('beer')
+        directions_textbox.send_keys('braise')
         add_button.click()
 
         # There is still no sign of Ben's recipes

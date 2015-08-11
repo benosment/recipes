@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
+from django.utils.html import escape
 
 from .models import User, Recipe
 
@@ -45,7 +47,19 @@ def add_recipe(request, user_name):
         recipe.user = user_
         recipe.url_name = recipe.title.lower().replace(' ', '-')
         recipe.url = '/users/%s/recipe/%s' % (user_name, recipe.url_name)
-        recipe.save()
+        try:
+            recipe.full_clean()
+            recipe.save()
+        except ValidationError:
+            if not recipe.title:
+                error = escape('You have to specify a recipe name')
+            elif not recipe.ingredients:
+                error = escape('You have to specify at least one ingredient')
+            elif not recipe.directions:
+                error = escape('You have to specify at least one step')
+            else:
+                error = escape('unknown')
+            return render(request, 'add.html', {"error": error})
         return redirect('/users/%s/' % user_.name)
 
     return render(request, 'add.html')
