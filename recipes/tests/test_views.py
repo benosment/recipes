@@ -40,9 +40,9 @@ class NewRecipeTest(TestCase):
         user.name = 'ben'
         user.save()
         self.client.post('/users/%s/add_recipe' % user.name,
-                         data={'recipe_title': 'new recipe',
-                               'recipe_ingredients': 'pepper',
-                               'recipe_directions': 'mix'})
+                         data={'title': 'new recipe',
+                               'ingredients': 'pepper',
+                               'directions': 'mix'})
         self.assertEqual(Recipe.objects.count(), 1)
         new_recipe = Recipe.objects.first()
         self.assertEqual(new_recipe.title, 'new recipe')
@@ -53,9 +53,9 @@ class NewRecipeTest(TestCase):
         user.name = 'ben'
         user.save()
         response = self.client.post('/users/%s/add_recipe' % user.name,
-                                    data={'recipe_title': 'Caico e pepe',
-                                          'recipe_ingredients': 'pepper',
-                                          'recipe_directions': 'mix'})
+                                    data={'title': 'Caico e pepe',
+                                          'ingredients': 'pepper',
+                                          'directions': 'mix'})
         self.assertRedirects(response, '/users/%s/' % user.name)
 
     def test_validation_errors_appear(self):
@@ -63,7 +63,7 @@ class NewRecipeTest(TestCase):
         user.name = 'ben'
         user.save()
         response = self.client.post('/users/%s/add_recipe' % user.name,
-                                    data={'recipe_title': ''})
+                                    data={'title': ''})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'add.html')
         expected_error = 'You have to specify a recipe name'
@@ -74,7 +74,7 @@ class NewRecipeTest(TestCase):
         user.name = 'ben'
         user.save()
         self.client.post('/users/%s/add_recipe' % user.name,
-                         data={'recipe_title': ''})
+                         data={'title': ''})
         self.assertEqual(Recipe.objects.count(), 0)
 
 
@@ -95,7 +95,7 @@ class EditRecipeTest(TestCase):
         recipe.save()
 
         self.client.post('/users/%s/recipe/%s/edit' % (user.name, recipe.url_name),
-                         data={'recipe_title': 'Cacio e Pepe'})
+                         data={'title': 'Cacio e Pepe'})
 
         edited_recipe = Recipe.objects.first()
         self.assertEqual(edited_recipe.title, 'Cacio e Pepe')
@@ -115,7 +115,7 @@ class EditRecipeTest(TestCase):
         recipe.save()
 
         response = self.client.post('/users/%s/recipe/%s/edit' % (user.name, recipe.url_name),
-                                    data={'recipe_title': 'Cacio e Pepe'})
+                                    data={'title': 'Cacio e Pepe'})
         self.assertRedirects(response, '/users/%s/recipe/%s' % (user.name, recipe.url_name))
 
 
