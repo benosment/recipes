@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 
 from recipes.views import home
 from recipes.models import Recipe, User
+from recipes.forms import RecipeForm
 
 
 class HomeTest(TestCase):
@@ -19,8 +20,20 @@ class HomeTest(TestCase):
         expected_html = render_to_string('home.html')
         self.assertEqual(response.content.decode(), expected_html)
 
+    def test_home_page_renders_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
+
 
 class NewRecipeTest(TestCase):
+
+    def test_add_recipe_page_uses_recipe_form(self):
+        user = User()
+        user.name = 'ben'
+        user.save()
+        response = self.client.get('/users/%s/add_recipe' % user.name)
+        self.assertIsInstance(response.context['form'], RecipeForm)
+
 
     def test_save_a_post_request_for_an_existing_user(self):
         user = User()

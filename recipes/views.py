@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import escape
 
 from .models import User, Recipe
+from .forms import RecipeForm
 
 import os
 import shutil
@@ -62,7 +63,7 @@ def add_recipe(request, user_name):
             return render(request, 'add.html', {"error": error})
         return redirect('/users/%s/' % user_.name)
 
-    return render(request, 'add.html')
+    return render(request, 'add.html', {'form': RecipeForm()})
 
 
 def user(request, user_name):
