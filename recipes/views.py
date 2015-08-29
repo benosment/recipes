@@ -98,12 +98,9 @@ def edit_recipe(request, user_name, recipe_url_name):
         recipe.notes = request.POST.get('notes', '')
         recipe.save()
         return redirect('/users/%s/recipe/%s' % (user_.name, recipe.url_name))
-    ingredients = recipe.ingredients.split('\n')
-    directions = recipe.directions.split('\n')
+    form = RecipeForm(instance=recipe)
     return render(request, 'edit.html', {'user_name': user_name,
-                                         'recipe': recipe,
-                                         'ingredients': ingredients,
-                                         'directions': directions})
+                                         'form': form})
 
 
 def export(request, username):
