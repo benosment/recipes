@@ -33,37 +33,28 @@ def contact(request):
 
 def add_recipe(request, user_name):
     if request.method == 'POST':
-        user_ = User.objects.get(name=user_name)
-        recipe = Recipe()
-        recipe.title = request.POST.get('title', '')
-        recipe.ingredients = request.POST.get('ingredients', '')
-        recipe.directions = request.POST.get('directions', '')
-        recipe.servings = request.POST.get('servings', '')
-        recipe.source = request.POST.get('source', '')
-        recipe.source_url = request.POST.get('source_url', '')
-        recipe.img_url = request.POST.get('img_url', '')
-        recipe.cooking_time = request.POST.get('cooking_time', '')
-        recipe.total_time = request.POST.get('total_time', '')
-        recipe.notes = request.POST.get('notes', '')
-        recipe.user = user_
-        recipe.url_name = recipe.title.lower().replace(' ', '-')
-        recipe.url = '/users/%s/recipe/%s' % (user_name, recipe.url_name)
-        try:
-            recipe.full_clean()
-            recipe.save()
-        except ValidationError:
-            if not recipe.title:
-                error = escape('You have to specify a recipe name')
-            elif not recipe.ingredients:
-                error = escape('You have to specify at least one ingredient')
-            elif not recipe.directions:
-                error = escape('You have to specify at least one step')
-            else:
-                error = escape('unknown')
-            return render(request, 'add.html', {"error": error, 'form': RecipeForm()})
-        return redirect('/users/%s/' % user_.name)
-
-    return render(request, 'add.html', {'form': RecipeForm()})
+        form = RecipeForm(data=request.POST)
+        if form.is_valid():
+            user_ = User.objects.get(name=user_name)
+            recipe = Recipe()
+            recipe.title = request.POST.get('title', '')
+            recipe.ingredients = request.POST.get('ingredients', '')
+            recipe.directions = request.POST.get('directions', '')
+            recipe.servings = request.POST.get('servings', '')
+            recipe.source = request.POST.get('source', '')
+            recipe.source_url = request.POST.get('source_url', '')
+            recipe.img_url = request.POST.get('img_url', '')
+            recipe.cooking_time = request.POST.get('cooking_time', '')
+            recipe.total_time = request.POST.get('total_time', '')
+            recipe.notes = request.POST.get('notes', '')
+            recipe.user = user_
+            recipe.url_name = recipe.title.lower().replace(' ', '-')
+            recipe.url = '/users/%s/recipe/%s' % (user_name, recipe.url_name)
+            return redirect('/users/%s/' % user_.name)
+        else:
+            return render(request, 'add.html', {'form': form})
+    else:
+        return render(request, 'add.html', {'form': RecipeForm()})
 
 
 def user(request, user_name):
