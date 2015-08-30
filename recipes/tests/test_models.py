@@ -52,7 +52,7 @@ class RecipeModelTest(TestCase):
         self.assertEqual(second_saved_item.user, user)
 
 
-    def test_cannot_svae_empty_recipes(self):
+    def test_cannot_save_empty_recipes(self):
         user = User()
         user.save()
 

@@ -35,7 +35,7 @@ class RecipeValidationTest(FunctionalTest):
         # He sees an error message saying that the recipe title cannot be
         # be blank
         error = self.browser.find_element_by_css_selector('.has-error')
-        self.assertEqual(error.text, 'You have to specify a recipe name')
+        self.assertEqual(error.text, 'This field is required.')
 
         # He fills in the recipe title
         name_textbox = self.browser.find_element_by_id('id_title')
@@ -47,7 +47,7 @@ class RecipeValidationTest(FunctionalTest):
 
         # Another error for ingredients
         error = self.browser.find_element_by_css_selector('.has-error')
-        self.assertEqual(error.text, 'You have to specify at least one ingredient')
+        self.assertEqual(error.text, 'This field is required.')
 
         # He adds an ingredient
         name_textbox = self.browser.find_element_by_id('id_title')
@@ -62,7 +62,7 @@ class RecipeValidationTest(FunctionalTest):
 
         # Another error for directions
         error = self.browser.find_element_by_css_selector('.has-error')
-        self.assertEqual(error.text, 'You have to specify at least one step')
+        self.assertEqual(error.text, 'This field is required.')
 
         # He adds a step
         name_textbox = self.browser.find_element_by_id('id_title')

@@ -50,6 +50,7 @@ def add_recipe(request, user_name):
             recipe.user = user_
             recipe.url_name = recipe.title.lower().replace(' ', '-')
             recipe.url = '/users/%s/recipe/%s' % (user_name, recipe.url_name)
+            recipe.save()
             return redirect('/users/%s/' % user_.name)
         else:
             return render(request, 'add.html', {'form': form})

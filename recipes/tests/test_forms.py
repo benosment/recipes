@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from recipes.forms import RecipeForm, EMPTY_TITLE_ERROR
+from recipes.forms import RecipeForm
 
 
 class RecipeFormTest(TestCase):
@@ -15,5 +15,5 @@ class RecipeFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors['title'],
-            [EMPTY_TITLE_ERROR]
+            ['This field is required.']
             )

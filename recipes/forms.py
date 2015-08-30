@@ -2,8 +2,6 @@ from django import forms
 
 from recipes.models import Recipe
 
-EMPTY_TITLE_ERROR = "You can't have an empty recipe title"
-
 class RecipeForm(forms.models.ModelForm):
 
     class Meta:
@@ -50,8 +48,4 @@ class RecipeForm(forms.models.ModelForm):
             'notes': forms.Textarea(attrs={
                 'class': 'form-control',
             }),
-        }
-
-        error_messages = {
-            'title': {'required': EMPTY_TITLE_ERROR}
         }
