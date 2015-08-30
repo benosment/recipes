@@ -111,20 +111,27 @@ def export(request, username):
                 f.write(recipe.ingredients)
                 f.write('\n\nDirections:\n')
                 f.write(recipe.directions)
-                f.write('\n\nServings:\n')
-                f.write(recipe.servings)
-                f.write('\n\Source:\n')
-                f.write(recipe.source)
-                f.write('\n\nSource URL:\n')
-                f.write(recipe.source_url)
-                f.write('\n\nImage URL:\n')
-                f.write(recipe.img_url)
-                f.write('\n\nCooking Time:\n')
-                f.write(recipe.cooking_time)
-                f.write('\n\nTotal Time:\n')
-                f.write(recipe.total_time)
-                f.write('\n\nNotes:\n')
-                f.write(recipe.notes)
+                if recipe.servings:
+                    f.write('\n\nServings:\n')
+                    f.write(recipe.servings)
+                if recipe.source:
+                    f.write('\n\Source:\n')
+                    f.write(recipe.source)
+                if recipe.source_url:
+                    f.write('\n\nSource URL:\n')
+                    f.write(recipe.source_url)
+                if recipe.img_url:
+                    f.write('\n\nImage URL:\n')
+                    f.write(recipe.img_url)
+                if recipe.cooking_time:
+                    f.write('\n\nCooking Time:\n')
+                    f.write(recipe.cooking_time)
+                if recipe.total_time:
+                    f.write('\n\nTotal Time:\n')
+                    f.write(recipe.total_time)
+                if recipe.notes:
+                    f.write('\n\nNotes:\n')
+                    f.write(recipe.notes)
         shutil.make_archive('recipes', 'zip', os.path.join('/tmp', username), 'recipes')
         shutil.rmtree(zipdir)
         filename = 'recipes.zip'
