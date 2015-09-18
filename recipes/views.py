@@ -115,7 +115,7 @@ def export(request, username):
                     f.write('\n\nServings:\n')
                     f.write(recipe.servings)
                 if recipe.source:
-                    f.write('\n\Source:\n')
+                    f.write('\n\nSource:\n')
                     f.write(recipe.source)
                 if recipe.source_url:
                     f.write('\n\nSource URL:\n')
