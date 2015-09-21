@@ -50,9 +50,6 @@ class RecipeValidationTest(FunctionalTest):
         self.assertEqual(error.text, 'This field is required.')
 
         # He adds an ingredient
-        name_textbox = self.browser.find_element_by_id('id_title')
-        name_textbox.send_keys('Grilled Halibut with Mango-Avocado Salsa')
-
         ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
         ingredients_textbox.send_keys('1 medium ripe avocado, peeled and cut into 1/2" dice')
 
@@ -65,12 +62,6 @@ class RecipeValidationTest(FunctionalTest):
         self.assertEqual(error.text, 'This field is required.')
 
         # He adds a step
-        name_textbox = self.browser.find_element_by_id('id_title')
-        name_textbox.send_keys('Grilled Halibut with Mango-Avocado Salsa')
-
-        ingredients_textbox = self.browser.find_element_by_id('id_ingredients')
-        ingredients_textbox.send_keys('1 medium ripe avocado, peeled and cut into 1/2" dice')
-
         directions_textbox = self.browser.find_element_by_id('id_directions')
         directions_textbox.send_keys('Prepare a grill to medium-high heat. Gently combine the avocado, mango, '
                                      'tomatoes, basil, 1 tablespoon oil, and 1 tablespoon lime juice in a large mixing '
