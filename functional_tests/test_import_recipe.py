@@ -39,19 +39,20 @@ class RecipeImportTest(FunctionalTest):
         import_button = self.browser.find_element_by_id('id_import_button')
 
         # He inputs a website and clicks the import button
-        import_textbox.send_keys('http://www.bonappetit.com/recipe/gwyneth-paltrow-s-grilled-halibut-with-mango-avocado-salsa')
+        import_textbox.send_keys('http://www.bonappetit.com/recipe/fancy-grilled-cheese-with-a-fried-egg')
         import_button.click()
 
         # Finally, he clicks the add button
+        add_button = self.browser.find_element_by_id('id_add_button')
         add_button.click()
 
         # He is returned to the main page
 
         # He sees that the recipe appears in the list of recipes
-        self.check_for_row_in_list_table('Grilled Halibut with Mango-Avocado Salsa')
+        self.check_for_row_in_list_table('Fancy Grilled Cheese with a Fried Egg')
 
         # He clicks on the recipe that he just added to verify the content
-        recipe_link = self.browser.find_element_by_link_text('Grilled Halibut with Mango-Avocado Salsa')
+        recipe_link = self.browser.find_element_by_link_text('Fancy Grilled Cheese with a Fried Egg')
         recipe_link.click()
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('4 6-ounce halibut or mahi-mahi fillets', page_text)
+        self.assertIn('4 large eggs', page_text)

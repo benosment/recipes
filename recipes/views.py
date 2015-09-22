@@ -37,6 +37,8 @@ def add_recipe(request, user_name):
         import_url = request.POST.get('import_url', '')
         if import_url:
             data = scrape(import_url)
+            data['ingredients'] = '\n'.join(data['ingredients'])
+            data['directions'] = '\n'.join(data['directions'])
             form = RecipeForm(data=data)
             return render(request, 'add.html', {'form': form})
         form = RecipeForm(data=request.POST)
