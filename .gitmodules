@@ -1,3 +1,6 @@
 [submodule "tools/ba-scraper"]
 	path = tools/ba-scraper
 	url = https://github.com/benosment/ba-scraper.git
+[submodule "recipes/tools/bas"]
+	path = recipes/tools/bas
+	url = https://github.com/benosment/bas.git

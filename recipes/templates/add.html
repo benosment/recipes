@@ -5,6 +5,18 @@
   <h1>Add Recipe</h1>
 </div>
 
+<form method="POST" role="form" class="form-inline">
+  {% csrf_token %}
+    <div class="form-group">
+      <label for="id_import_url" class="control-label col-sm-2">Import Recipe</label>
+      <div class="col-sm-10">
+        <input name="import_url" id="id_import_url"
+               class="form-control"/>
+        <button type="submit" id="id_import_button" class="btn btn-primary">Import</button>
+      </div>
+    </div>
+</form>
+
 <form method="POST" role="form" class="form-horizontal">
   {% csrf_token %}
     <div class="form-group">

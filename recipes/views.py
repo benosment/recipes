@@ -6,6 +6,7 @@ from django.utils.html import escape
 
 from .models import User, Recipe
 from .forms import RecipeForm
+from .tools.bas.scraper import scrape
 
 import os
 import shutil
@@ -33,6 +34,11 @@ def contact(request):
 
 def add_recipe(request, user_name):
     if request.method == 'POST':
+        import_url = request.POST.get('import_url', '')
+        if import_url:
+            data = scrape(import_url)
+            form = RecipeForm(data=data)
+            return render(request, 'add.html', {'form': form})
         form = RecipeForm(data=request.POST)
         if form.is_valid():
             user_ = User.objects.get(name=user_name)
