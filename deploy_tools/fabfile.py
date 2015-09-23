@@ -19,7 +19,7 @@ def _create_directory_structure_if_necessary(site_folder):
     for subfolder in ('database', 'static', 'virtualenv', 'source'):
         run('mkdir -p %s/%s' % (site_folder, subfolder))
 
-        
+
 def _get_latest_source(source_folder):
     if exists(source_folder + '/.git'):
         run('cd %s && git fetch' % (source_folder,))
@@ -27,6 +27,8 @@ def _get_latest_source(source_folder):
         run('git clone %s %s' % (REPO_URL, source_folder))
     current_commit = local('git log -n 1 --format=%H', capture=True)
     run('cd %s && git reset --hard %s' % (source_folder, current_commit))
+    run('git submodule init')
+    run('git submodule update')
 
 
 def _update_settings(source_folder, site_name):
@@ -35,7 +37,7 @@ def _update_settings(source_folder, site_name):
     sed(settings_path,
         'ALLOWED_HOSTS = .+$',
         'ALLOWED_HOSTS = ["%s"]' % (site_name,))
-    
+
     secret_key_file = source_folder + '/cookbook/secret_key.py'
     if not exists(secret_key_file):
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'

@@ -52,3 +52,10 @@ Assume we have a user account at /home/username
 
 ## To Deploy:
     fab deploy:host=ben@cookbook.benosment.com
+
+## To Debug
+    # you can use nginx + django dev server
+    sudo service nginx reload
+    sudo stop gunicorn-cookbook.benosment
+    # set debug to True, etc..
+    ../virtualenv/bin/python manage.py runserver localhost:9000
