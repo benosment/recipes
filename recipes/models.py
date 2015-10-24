@@ -5,6 +5,9 @@ class User(models.Model):
     name = models.TextField(default='')
     display_name = models.TextField(default='')
 
+    def __str__(self):
+        return self.display_name
+
 
 class Recipe(models.Model):
     title = models.TextField(default='')
@@ -20,3 +23,6 @@ class Recipe(models.Model):
     cooking_time = models.TextField(default='', blank=True)
     total_time = models.TextField(default='', blank=True)
     notes = models.TextField(default='', blank=True)
+
+    def __str__(self):
+        return self.title
