@@ -4,6 +4,7 @@ import random
 
 REPO_URL = 'https://github.com/benosment/recipes.git'
 
+
 def deploy():
     site_folder = '/home/%s/sites/%s' % (env.user, env.host)
     source_folder = site_folder + '/source'
@@ -27,8 +28,8 @@ def _get_latest_source(source_folder):
         run('git clone %s %s' % (REPO_URL, source_folder))
     current_commit = local('git log -n 1 --format=%H', capture=True)
     run('cd %s && git reset --hard %s' % (source_folder, current_commit))
-    run('git submodule init')
-    run('git submodule update')
+    run('cd %s && git submodule init' % source_folder)
+    run('cd %s && git submodule update' % source_folder)
 
 
 def _update_settings(source_folder, site_name):
