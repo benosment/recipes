@@ -10,7 +10,7 @@ class User(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.TextField(default='')
+    title = models.TextField(default='', unique=True)
     ingredients = models.TextField(default='')
     directions = models.TextField(default='')
     servings = models.TextField(default='', blank=True)
